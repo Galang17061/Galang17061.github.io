@@ -11,17 +11,24 @@ body {
     background: url(processor.jpg);
     background-size: cover;
     background-attachment: fixed;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .container {
     position: relative;
     width: 90%;
-    left: 280px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     grid-template-rows: auto;
     grid-gap: 0 40px;
+}
+
+.container1 {
+    left: 230px;
+}
+
+.container2 {
+    left: 550px;
 }
 
 .container .box {
@@ -134,7 +141,7 @@ body {
 }
 
 .wave {
-    position: absolute;
+    position: fixed;
     width: 100%;
     /* Depend how much height your wave has */
     height: 143px;
@@ -149,8 +156,7 @@ body {
     width: 100%;
     height: 143px;
     background: url(wave.png );
-    position: absolute;
-    top: 0;
+    position: fixed;
     left: 0;
     opacity: 0.4;
     animation: animate-reverse 10s linear infinite;
@@ -161,8 +167,7 @@ body {
     width: 100%;
     height: 143px;
     background: url(wave.png );
-    position: absolute;
-    top: 0;
+    position: fixed;
     left: 0;
     opacity: 0.6;
     animation: animate 20s linear infinite;
