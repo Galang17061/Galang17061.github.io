@@ -1,58 +1,183 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galang — Software Engineer</title>
+<meta name="description" content="Portfolio of Galang — engineer building reliability and maintenance engineering software.">
+<style>
+  :root {
+    --bg: #0b0f14;
+    --panel: #121821;
+    --line: #1f2937;
+    --text: #e5e9f0;
+    --muted: #8b98a9;
+    --accent: #4fd1a5;
+    --accent-dim: #2c7a62;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 880px; margin: 0 auto; padding: 56px 24px 80px; }
+  header h1 { font-size: 2rem; letter-spacing: -0.02em; }
+  header .role { color: var(--accent); font-weight: 600; margin-top: 4px; }
+  header p.intro { color: var(--muted); margin-top: 14px; max-width: 60ch; }
+  .links { margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .links a {
+    color: var(--text); text-decoration: none; font-size: 0.92rem;
+    border: 1px solid var(--line); border-radius: 8px; padding: 7px 14px;
+    transition: border-color .15s;
+  }
+  .links a:hover { border-color: var(--accent); }
+  h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 56px 0 18px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px; margin-bottom: 20px;
+  }
+  .card h3 { font-size: 1.35rem; letter-spacing: -0.01em; }
+  .card .tagline { color: var(--accent); font-size: 0.95rem; margin-top: 2px; }
+  .card p { color: var(--muted); margin-top: 12px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .badges span {
+    font-size: 0.78rem; color: var(--text); background: #0e1420;
+    border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px;
+  }
+  ul.feats { margin: 14px 0 0 18px; color: var(--muted); }
+  ul.feats li { margin-top: 6px; }
+  .launch-row { margin-top: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  button#launch {
+    font: inherit; font-weight: 700; cursor: pointer;
+    color: #06251b; background: var(--accent);
+    border: 0; border-radius: 10px; padding: 12px 22px;
+    transition: transform .1s, background .15s;
+  }
+  button#launch:hover { background: #63e0b5; }
+  button#launch:active { transform: scale(0.98); }
+  button#launch:disabled { background: var(--accent-dim); cursor: wait; }
+  #status { color: var(--muted); font-size: 0.92rem; min-height: 1.4em; }
+  #status.err { color: #f2807a; }
+  .bar { height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; margin-top: 14px; display: none; }
+  .bar i { display: block; height: 100%; width: 0%; background: var(--accent); transition: width .8s linear; }
+  .note { font-size: 0.83rem; color: var(--muted); margin-top: 14px; opacity: 0.85; }
+  footer { margin-top: 70px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 22px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Galang</h1>
+    <div class="role">Software Engineer</div>
+    <p class="intro">
+      I build engineering software end to end — from reliability mathematics and
+      backend services in Go, to modern web frontends, to the cloud infrastructure
+      they run on.
+    </p>
+    <div class="links">
+      <a href="https://github.com/Galang17061">GitHub</a>
+      <a href="mailto:reformantoko@gmail.com">Email</a>
+    </div>
+  </header>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="style.css">
-        <title>Github Page</title>
-    </head>
+  <h2>Featured Project</h2>
+  <div class="card">
+    <h3>Strata</h3>
+    <div class="tagline">Reliability, Availability &amp; Maintainability (RAMS) platform</div>
+    <p>
+      A full-stack SaaS for reliability engineering: model plant systems as
+      reliability block diagrams, fit failure distributions to field data, and let a
+      genetic-algorithm studio search for the optimal maintenance strategy.
+    </p>
+    <ul class="feats">
+      <li>Go backend, Next.js frontend, SQL Server — fully containerised</li>
+      <li>Reliability analytics: Weibull/exponential/Poisson fitting, RBD roll-ups, snapshots &amp; versioning</li>
+      <li>Genetic-algorithm optimization studio with concurrency gating</li>
+      <li>Load-tested to 500 concurrent users at 0% errors (k6, cross-region)</li>
+    </ul>
+    <div class="badges">
+      <span>Go</span><span>Next.js</span><span>TypeScript</span><span>SQL Server</span>
+      <span>Docker</span><span>Caddy</span><span>k6</span><span>Prometheus</span><span>GCP</span>
+    </div>
 
-    <body>
-        <h1 style="color: mintcream">Welcome to My Github Page</h1>
-        <div class="container container1">
-            <div class="box">
-                <div class="content">
-                    <h2>01</h2>
-                    <h3>Tugas 1</h3>
-                    <p>Tugas pertama ini adalah mempelajari ilmu css yang telah diajarkan yaitu membuat duplikasi
-                        tampilan youtube</p>
-                    <a href="https://galang17061.github.io/Tugas1/">Read more</a>
-                </div>
-            </div>
-            <div class="box">
-                <div class="content">
-                    <h2>02</h2>
-                    <h3>Tugas 2</h3>
-                    <p>Tugas ini sudah bukan tentang dasar html ataupun css, tetapi telah memasuki javascript dimana
-                        kami diminta untuk mengurutkan angka dari kecil ke besar</p>
-                    <a href="https://galang17061.github.io/Tugas2/">Read more</a>
-                </div>
-            </div>
-            <div class="box">
-                <div class="content">
-                    <h2>03</h2>
-                    <h3>Tugas 3</h3>
-                    <p>Kali ini tugas yang diberikan sudah memasuki role backend . Dituntun untuk
-                        menggunakan php sekaligus mengimplementasikannya untuk create data yang sederhana dan digunakan
-                        MySql sebagai dbms nya.</p>
-                    <a href="https://galang17061.github.io/Tugas3/">Read more</a>
-                </div>
-            </div>
-        </div>
-        <div class="container container2" style="padding-top: 40px;">
-            <div class="box">
-                <div class="content">
-                    <h2>ETS</h2>
-                    <h3>Tugas ETS</h3>
-                    <p>ETS! Ya, tugas ini walaupun disuruh hanya dengan html tapi dengan html tapi malah dibuat
-                        menggunakan CI. Hehe</p>
-                    <a href="https://galang17061.github.io/TugasETS/">Read more</a>
-                </div>
-            </div>
-        </div>
-        <div class="wave"></div>
-    </body>
+    <div class="launch-row">
+      <button id="launch">🚀 Launch Live Demo</button>
+      <div id="status"></div>
+    </div>
+    <div class="bar" id="bar"><i id="fill"></i></div>
+    <p class="note">
+      The demo boots its own server on Google Cloud when you click — a cold start
+      takes about 90 seconds, then you'll be redirected automatically. It shuts
+      itself down after 30 minutes of quiet.
+    </p>
+  </div>
 
+  <footer>
+    © <span id="year"></span> Galang · This page is static; the demo server wakes on request.
+  </footer>
+</main>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const FN = "https://us-central1-vm-testing-507711.cloudfunctions.net/strata-wake";
+  const btn = document.getElementById("launch");
+  const status = document.getElementById("status");
+  const bar = document.getElementById("bar");
+  const fill = document.getElementById("fill");
+
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  async function call(method) {
+    const r = await fetch(FN, { method });
+    if (!r.ok) throw new Error("wake service " + r.status);
+    return r.json();
+  }
+
+  btn.addEventListener("click", async () => {
+    btn.disabled = true;
+    status.classList.remove("err");
+    try {
+      status.textContent = "Checking the demo server…";
+      let d = await call("GET");
+      if (d.status === "RUNNING" && d.healthy) {
+        status.textContent = "Server is already up — redirecting…";
+        location.href = d.app;
+        return;
+      }
+      status.textContent = "Starting the demo server (about 90 seconds)…";
+      bar.style.display = "block";
+      d = await call("POST");
+      const t0 = Date.now();
+      const budget = 240000;
+      while (Date.now() - t0 < budget) {
+        await sleep(5000);
+        const s = Math.round((Date.now() - t0) / 1000);
+        fill.style.width = Math.min(95, (s / 110) * 100) + "%";
+        status.textContent = "Warming up… " + s + "s (database and app are booting)";
+        try {
+          d = await call("GET");
+          if (d.status === "RUNNING" && d.healthy) {
+            fill.style.width = "100%";
+            status.textContent = "Ready — redirecting…";
+            await sleep(600);
+            location.href = d.app;
+            return;
+          }
+        } catch (e) {}
+      }
+      throw new Error("timed out");
+    } catch (e) {
+      status.classList.add("err");
+      status.textContent =
+        "Couldn't start the demo (" + e.message + "). Please try again, or email me and I'll spin it up for you.";
+      btn.disabled = false;
+      bar.style.display = "none";
+      fill.style.width = "0%";
+    }
+  });
+</script>
+</body>
 </html>
