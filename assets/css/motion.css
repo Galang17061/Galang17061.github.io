@@ -1,0 +1,91 @@
+/* Motion budget: DESIGN.md §7. Three kinds of movement only.
+   Everything below is additive: without JS (no .js on <html>) every element
+   is already in its final state. */
+
+/* 1. SVG draw-in and signal travel ------------------------------------- */
+.topo .edge, .draw .edge, .draw .curve {
+  stroke-dasharray: 1;          /* every path carries pathLength="1" */
+  stroke-dashoffset: 0;
+}
+
+/* Hero topology: draws once on load, staggered by column via --d. */
+.js .topo .edge {
+  stroke-dashoffset: 1;
+  animation: draw 0.3s ease-out forwards;
+  animation-delay: var(--d, 0s);
+}
+.js .topo .node, .js .topo .fade {
+  opacity: 0;
+  animation: fade 0.5s ease-out forwards;
+  animation-delay: calc(var(--d, 0s) + 0.1s);
+}
+.topo .signal {
+  animation: travel 10s linear 1.2s infinite;
+}
+
+/* Figures further down the page: draw once when scrolled into view. */
+.js .draw .edge, .js .draw .curve { stroke-dashoffset: 1; }
+.js .draw.is-in .edge {
+  animation: draw 0.35s ease-out forwards;
+  animation-delay: var(--d, 0s);
+}
+.js .draw.is-in .curve {
+  animation: draw 1.6s ease-out forwards;
+}
+.js .draw .node, .js .draw .fade { opacity: 0; }
+.js .draw.is-in .node, .js .draw.is-in .fade {
+  animation: fade 0.5s ease-out forwards;
+  animation-delay: calc(var(--d, 0s) + 0.1s);
+}
+
+@keyframes draw   { to { stroke-dashoffset: 0; } }
+@keyframes fade   { to { opacity: 1; } }
+@keyframes travel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+
+/* 2. Scroll reveal: once, 400ms, 6px ------------------------------------ */
+.js [data-reveal] { opacity: 0; transform: translateY(6px); }
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+/* 3. Hover / focus: colour only ---------------------------------------- */
+a, .btn, .tag, .row-title, .row-num svg rect {
+  transition: color 0.15s, border-color 0.15s, background-color 0.15s,
+              text-decoration-color 0.15s, stroke 0.15s;
+}
+.btn-primary:active { transform: translateY(1px); }
+.launcher-progress i { transition: width 0.8s linear; }
+
+/* Reduced motion: show the final state, nothing moves ------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .js .topo .edge, .js .draw .edge, .js .draw .curve { animation: none; stroke-dashoffset: 0; }
+  .js .topo .node, .js .topo .fade, .js .draw .node, .js .draw .fade { animation: none; opacity: 1; }
+  .topo .signal { animation: none; offset-distance: 30%; }
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .launcher-progress i { transition: none; }
+}
+
+/* Browsers without CSS motion path: hide the signal rather than break it. */
+@supports not (offset-path: path("M0 0")) {
+  .topo .signal { display: none; }
+}
+
+/* Orrery rings draw slower than edges. */
+.topo .ring { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.js .topo .ring { stroke-dashoffset: 1; animation: draw 1.4s ease-out forwards; animation-delay: var(--d, 0s); }
+@media (prefers-reduced-motion: reduce) { .js .topo .ring { animation: none; stroke-dashoffset: 0; } }
+
+/* GA studio figure (Strata): the one figure allowed a slow loop, because the
+   loop *is* the feature. Starts only once the figure is in view. */
+.js .draw.is-in .ga-cut { animation: fade 0.5s ease-out 0.6s forwards, ga-cut 12s steps(6, end) 1.2s infinite; }
+.js .draw.is-in .ga-mut { animation: fade 0.5s ease-out 0.7s forwards, ga-mut 7s steps(7, end) 1.2s infinite; }
+.js .draw.is-in .ga-run { animation: travel 8s linear 1.6s infinite; }
+.ga .ga-run { offset-distance: 100%; }
+@keyframes ga-cut { to { transform: translateX(180px); } }
+@keyframes ga-mut { to { transform: translateX(210px); } }
+@media (prefers-reduced-motion: reduce) {
+  .js .draw.is-in .ga-cut, .js .draw.is-in .ga-mut { animation: none; opacity: 1; }
+  .js .draw.is-in .ga-run { animation: none; }
+}
