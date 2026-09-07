@@ -1,0 +1,51 @@
+/* Design tokens. Source of truth: DESIGN.md §3–§5. */
+:root {
+  /* Colour: light "paper & ink" (DESIGN.md §3a) */
+  --paper: #f7f6f2;
+  --paper-2: #efede7;
+  --ink: #14171a;
+  --ink-2: #4a5158;
+  --ink-3: #8a9099;
+  --rule: #d9d6ce;
+  --accent: #0f6e5c;
+  --accent-soft: #d7ebe4;
+  --danger: #a83a32;
+
+  /* Strata blue alternative. Swap the two lines above to try it:
+  --accent: #1e4d7b;
+  --accent-soft: #dbe6f1;
+  */
+
+  /* Type (DESIGN.md §4) */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --fs-display: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
+  --fs-h2: clamp(1.5rem, 1.1rem + 1.8vw, 2.25rem);
+  --fs-h3: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
+  --fs-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --fs-small: 0.875rem;
+  --fs-mono: 0.8125rem;
+
+  /* Spacing (DESIGN.md §5) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+
+  --container: 1120px;
+  --gutter: clamp(20px, 5vw, 48px);
+  --section: clamp(64px, 10vw, 128px);
+  --measure: 62ch;
+
+  --r-btn: 4px;
+  --r-tag: 2px;
+  --r-fig: 6px;
+}
