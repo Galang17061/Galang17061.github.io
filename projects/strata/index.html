@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strata — Galang Reformantoko</title>
+<meta name="description" content="Strata is a reliability analysis platform built around reliability block diagrams: wire components in series, parallel or k-out-of-n, fit Weibull, exponential and Poisson models to failure logs, and let a genetic algorithm pick vendors under a budget.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Strata — a reliability analysis platform, built end to end">
+<meta property="og:description" content="Reliability block diagrams, Weibull fitting and a genetic-algorithm vendor optimiser. Go, Next.js, SQL Server, GCP.">
+<meta name="theme-color" content="#f7f6f2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f7f6f2'/%3E%3Cpath d='M3 16h6M23 16h6M9 16c4 0 4-6 8-6h6M9 16c4 0 4 6 8 6h6' fill='none' stroke='%2314171a' stroke-width='2'/%3E%3Ccircle cx='23' cy='10' r='2.5' fill='%230f6e5c'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/motion.css">
+<script>document.documentElement.classList.add("js");</script>
+<style>
+  /* Page-specific SVG typography only (DESIGN.md §1). */
+  .figure .label { font-size: 12px; }
+  .figure .label-sm { font-size: 10px; fill: var(--ink-3); }
+  .figure .axis { stroke: var(--rule); }
+  .figure .bar { fill: var(--paper); stroke: var(--ink-3); stroke-width: 1; }
+  .figure .curve { stroke: var(--accent); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .figure .enclosure { stroke: var(--ink-3); stroke-dasharray: 4 4; }
+  .sheet .tree-label { font-size: 11px; fill: var(--ink); text-anchor: middle; dominant-baseline: middle; }
+  /* GA studio figure */
+  .ga .gene { fill: var(--paper); stroke: var(--ink-3); stroke-width: 1; }
+  .ga .gene-t { font-size: 10px; fill: var(--ink); text-anchor: middle; dominant-baseline: middle; }
+  .ga .ga-cut { stroke: var(--ink); stroke-width: 1.25; stroke-dasharray: 3 3; }
+  .ga .ga-mut { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+  .ga .ga-target { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 4 3; }
+  .ga .signal { fill: var(--accent); }
+</style>
+</head>
+<body>
+
+<header class="container">
+  <nav class="nav" aria-label="Primary">
+    <a class="wordmark" href="../../index.html">Galang</a>
+    <ul>
+      <li><a href="../../index.html#work">Work</a></li>
+      <li><a href="../../index.html#experience">Experience</a></li>
+      <li><a href="https://github.com/Galang17061" rel="me">GitHub</a></li>
+      <li><a href="mailto:reformantoko@gmail.com">Email</a></li>
+    </ul>
+  </nav>
+  <a class="backlink" href="../../index.html#work">← All projects</a>
+</header>
+
+<main>
+<article class="brief">
+
+  <section class="hero container" aria-labelledby="title">
+    <p class="eyebrow">Project 01 · Brief · Independent, full-stack</p>
+    <div class="hero-cols">
+      <h1 id="title">Strata</h1>
+      <div class="hero-side">
+        <p class="lede">
+          A reliability analysis platform built around reliability block diagrams.
+          Model a plant as a tree of subsystems and components, wire the blocks,
+          log every failure, and get the reliability of every level after any number
+          of running hours.
+        </p>
+        <dl class="hero-facts">
+          <div><dt>Role</dt><dd>Full-stack, end to end</dd></div>
+          <div><dt>Year</dt><dd class="tabular">2026</dd></div>
+          <div><dt>Status</dt><dd>Live demo</dd></div>
+        </dl>
+        <p class="cta"><a class="arrow-link" href="#demo">→ Launch the live demo</a></p>
+      </div>
+    </div>
+
+    <figure class="sheet">
+      <!-- Drawing RBD-001: the hierarchy an engineer builds in Strata, and the topology it evaluates. -->
+      <svg class="topo" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+          <pattern id="sheet-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path class="grid-line" d="M20 0 H0 V20" fill="none"/>
+          </pattern>
+          <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto">
+            <path class="arrow" d="M0 0 L8 4 L0 8 Z"/>
+          </marker>
+        </defs>
+
+        <rect class="grid-bg" x="40" y="40" width="1120" height="480"/>
+
+        <g class="chrome">
+          <rect class="frame" x="16" y="16" width="1168" height="528"/>
+          <rect class="frame-inner" x="40" y="40" width="1120" height="480"/>
+          <g class="tick">
+            <path d="M226.7 16 V40 M413.3 16 V40 M600 16 V40 M786.7 16 V40 M973.3 16 V40"/>
+            <path d="M226.7 520 V544 M413.3 520 V544 M600 520 V544 M786.7 520 V544 M973.3 520 V544"/>
+            <path d="M16 160 H40 M16 280 H40 M16 400 H40"/>
+            <path d="M1160 160 H1184 M1160 280 H1184 M1160 400 H1184"/>
+          </g>
+          <g class="coord">
+            <text x="133" y="28">A</text><text x="320" y="28">B</text><text x="507" y="28">C</text>
+            <text x="693" y="28">D</text><text x="880" y="28">E</text><text x="1067" y="28">F</text>
+            <text x="133" y="532">A</text><text x="320" y="532">B</text><text x="507" y="532">C</text>
+            <text x="693" y="532">D</text><text x="880" y="532">E</text><text x="1067" y="532">F</text>
+            <text x="28" y="100">1</text><text x="28" y="220">2</text><text x="28" y="340">3</text><text x="28" y="460">4</text>
+            <text x="1172" y="100">1</text><text x="1172" y="220">2</text><text x="1172" y="340">3</text><text x="1172" y="460">4</text>
+          </g>
+          <g class="title-block">
+            <rect class="tb-bg" x="800" y="430" width="360" height="90"/>
+            <path class="tb-line" d="M800 460 H1160 M800 490 H1160 M1040 430 V520"/>
+            <text class="tb-k" x="810" y="442">Project</text>
+            <text class="tb-v strong" x="810" y="455">STRATA</text>
+            <text class="tb-k" x="810" y="472">Title</text>
+            <text class="tb-v" x="810" y="485">HIERARCHY → BLOCK DIAGRAM</text>
+            <text class="tb-k" x="810" y="502">Engineer</text>
+            <text class="tb-v" x="810" y="515">GALANG REFORMANTOKO</text>
+            <text class="tb-k" x="1050" y="442">Drawing</text>
+            <text class="tb-v" x="1050" y="455">RBD-001</text>
+            <text class="tb-k" x="1050" y="472">Revision</text>
+            <text class="tb-v" x="1050" y="485">2026.09</text>
+            <text class="tb-k" x="1050" y="502">Sheet</text>
+            <text class="tb-v" x="1050" y="515">1 / 1</text>
+          </g>
+        </g>
+
+        <!-- left: the hierarchy an engineer builds -->
+        <rect class="enclosure fade" style="--d:0s" x="60" y="60" width="390" height="300"/>
+        <text class="enc-title fade" style="--d:0s" x="68" y="76">01 · Hierarchy · what the engineer builds</text>
+
+        <g class="edges">
+          <path class="edge" pathLength="1" style="--d:.05s" d="M250 124 V160 H120 V200"/>
+          <path class="edge" pathLength="1" style="--d:.05s" d="M250 124 V200"/>
+          <path class="edge" pathLength="1" style="--d:.05s" d="M250 124 V160 H380 V200"/>
+          <path class="edge" pathLength="1" style="--d:.2s" d="M120 232 V270 H92 V310"/>
+          <path class="edge" pathLength="1" style="--d:.2s" d="M120 232 V270 H148 V310"/>
+          <path class="edge" pathLength="1" style="--d:.2s" d="M250 232 V270 H198 V310"/>
+          <path class="edge" pathLength="1" style="--d:.2s" d="M250 232 V310"/>
+          <path class="edge" pathLength="1" style="--d:.2s" d="M250 232 V270 H302 V310"/>
+          <path class="edge" pathLength="1" style="--d:.2s" d="M380 232 V270 H356 V310"/>
+          <path class="edge" pathLength="1" style="--d:.2s" d="M380 232 V270 H410 V310"/>
+          <path class="edge map" pathLength="1" style="--d:.5s" d="M452 225 H512" marker-end="url(#arr)"/>
+        </g>
+
+        <g class="nodes">
+          <rect class="node" style="--d:0s" x="205" y="90" width="90" height="34" rx="3"/>
+          <text class="label fade" style="--d:0s" x="250" y="107">PLANT</text>
+
+          <rect class="node" style="--d:.12s" x="80" y="200" width="80" height="32" rx="3"/>
+          <text class="tree-label fade" style="--d:.12s" x="120" y="216">FEED</text>
+          <rect class="node" style="--d:.12s" x="210" y="200" width="80" height="32" rx="3"/>
+          <text class="tree-label fade" style="--d:.12s" x="250" y="216">PROCESS</text>
+          <rect class="node" style="--d:.12s" x="340" y="200" width="80" height="32" rx="3"/>
+          <text class="tree-label fade" style="--d:.12s" x="380" y="216">COOLING</text>
+
+          <rect class="node" style="--d:.3s" x="69" y="310" width="46" height="28" rx="3"/>
+          <text class="tree-label fade" style="--d:.3s" x="92" y="324">T-01</text>
+          <rect class="node" style="--d:.3s" x="125" y="310" width="46" height="28" rx="3"/>
+          <text class="tree-label fade" style="--d:.3s" x="148" y="324">P-01</text>
+          <rect class="node" style="--d:.3s" x="175" y="310" width="46" height="28" rx="3"/>
+          <text class="tree-label fade" style="--d:.3s" x="198" y="324">R-01A</text>
+          <rect class="node" style="--d:.3s" x="227" y="310" width="46" height="28" rx="3"/>
+          <text class="tree-label fade" style="--d:.3s" x="250" y="324">R-01B</text>
+          <rect class="node" style="--d:.3s" x="279" y="310" width="46" height="28" rx="3"/>
+          <text class="tree-label fade" style="--d:.3s" x="302" y="324">R-01C</text>
+          <rect class="node" style="--d:.3s" x="333" y="310" width="46" height="28" rx="3"/>
+          <text class="tree-label fade" style="--d:.3s" x="356" y="324">HX-01</text>
+          <rect class="node standby" style="--d:.3s" x="387" y="310" width="46" height="28" rx="3"/>
+          <text class="tree-label fade" style="--d:.3s" x="410" y="324">HX-02</text>
+        </g>
+        <text class="sub fade" style="--d:.35s" x="250" y="350">failures logged per leaf · fitted Weibull / exponential / Poisson</text>
+
+        <!-- right: the topology Strata evaluates -->
+        <rect class="enclosure fade" style="--d:.5s" x="500" y="60" width="640" height="300"/>
+        <text class="enc-title fade" style="--d:.5s" x="508" y="76">02 · Topology · what Strata evaluates, bottom-up</text>
+
+        <g class="edges">
+          <path class="edge" pathLength="1" style="--d:.55s" d="M520 225 H540"/>
+          <path class="edge" pathLength="1" style="--d:.6s"  d="M596 225 H620"/>
+          <path class="edge" pathLength="1" style="--d:.66s" d="M660 225 H700"/>
+          <path class="edge" pathLength="1" style="--d:.74s" d="M700 225 V160 Q700 150 710 150 H740"/>
+          <path class="edge" pathLength="1" style="--d:.74s" d="M700 225 H740"/>
+          <path class="edge" pathLength="1" style="--d:.74s" d="M700 225 V290 Q700 300 710 300 H740"/>
+          <path class="edge" pathLength="1" style="--d:.86s" d="M816 150 H830 Q840 150 840 160 V225 H852"/>
+          <path class="edge" pathLength="1" style="--d:.86s" d="M816 225 H852"/>
+          <path class="edge" pathLength="1" style="--d:.86s" d="M816 300 H830 Q840 300 840 290 V225"/>
+          <path class="edge" pathLength="1" style="--d:.96s" d="M888 225 H930"/>
+          <path class="edge" pathLength="1" style="--d:1.04s" d="M930 225 V190 Q930 180 940 180 H970"/>
+          <path class="edge standby" pathLength="1" style="--d:1.04s" d="M930 225 V260 Q930 270 940 270 H970"/>
+          <path class="edge" pathLength="1" style="--d:1.14s" d="M1010 180 H1040 Q1050 180 1050 190 V225"/>
+          <path class="edge standby" pathLength="1" style="--d:1.14s" d="M1010 270 H1040 Q1050 270 1050 260 V225"/>
+          <path class="edge" pathLength="1" style="--d:1.22s" d="M1050 225 H1110" marker-end="url(#arr)"/>
+        </g>
+
+        <g class="nodes">
+          <circle class="jn fade" style="--d:.55s" cx="520" cy="225" r="3.5"/>
+          <rect class="node" style="--d:.58s" x="540" y="205" width="56" height="40" rx="8"/>
+          <text class="label fade" style="--d:.58s" x="568" y="226">T-01</text>
+          <circle class="node sym" style="--d:.64s" cx="640" cy="225" r="20"/>
+          <path class="glyph fade" style="--d:.64s" d="M633 216 L651 225 L633 234 Z"/>
+          <text class="sub fade" style="--d:.64s" x="640" y="258">P-01</text>
+          <circle class="jn fade" style="--d:.7s" cx="700" cy="225" r="3.5"/>
+
+          <rect class="node" style="--d:.8s" x="740" y="132" width="76" height="36" rx="3"/>
+          <text class="label fade" style="--d:.8s" x="778" y="151">R-01A</text>
+          <rect class="node" style="--d:.8s" x="740" y="207" width="76" height="36" rx="3"/>
+          <text class="label fade" style="--d:.8s" x="778" y="226">R-01B</text>
+          <rect class="node" style="--d:.8s" x="740" y="282" width="76" height="36" rx="3"/>
+          <text class="label fade" style="--d:.8s" x="778" y="301">R-01C</text>
+          <polygon class="node" style="--d:.92s" points="870,205 890,225 870,245 850,225"/>
+          <text class="sub fade" style="--d:.92s" x="870" y="262">2oo3</text>
+
+          <circle class="jn fade" style="--d:1s" cx="930" cy="225" r="3.5"/>
+          <circle class="node sym" style="--d:1.08s" cx="990" cy="180" r="20"/>
+          <path class="glyph-line fade" style="--d:1.08s" d="M977 180 l4 -7 l6 14 l6 -14 l6 14 l4 -7"/>
+          <text class="sub fade" style="--d:1.08s" x="990" y="214">HX-01</text>
+          <circle class="node sym standby" style="--d:1.08s" cx="990" cy="270" r="20"/>
+          <path class="glyph-line fade" style="--d:1.08s" d="M977 270 l4 -7 l6 14 l6 -14 l6 14 l4 -7"/>
+          <text class="sub fade" style="--d:1.08s" x="990" y="304">HX-02 · standby</text>
+          <text class="sub fade" style="--d:1.08s" x="990" y="146">1oo2</text>
+          <circle class="jn fade" style="--d:1.18s" cx="1050" cy="225" r="3.5"/>
+          <text class="sub fade" style="--d:1.24s" x="1118" y="225" text-anchor="start">out</text>
+        </g>
+
+        <g class="annot">
+          <path class="leader fade" style="--d:1.24s" d="M1080 225 V250"/>
+          <text class="note fade" style="--d:1.24s" x="1138" y="262" text-anchor="end">R(8 760 h) = 0.987</text>
+        </g>
+
+        <text class="formula fade" style="--d:1.3s" x="60" y="478">
+          <tspan>R</tspan><tspan dy="4" font-size="9">PLANT</tspan><tspan dy="-4">(t) = R</tspan><tspan dy="4" font-size="9">T01</tspan><tspan dy="-4"> · R</tspan><tspan dy="4" font-size="9">P01</tspan><tspan dy="-4"> · </tspan><tspan class="k">[</tspan><tspan>3R</tspan><tspan dy="-5" font-size="9">2</tspan><tspan dy="5"> − 2R</tspan><tspan dy="-5" font-size="9">3</tspan><tspan dy="5"></tspan><tspan class="k">]</tspan><tspan dy="4" font-size="9">R01</tspan><tspan dy="-4"> · </tspan><tspan class="k">[</tspan><tspan>1 − (1 − R</tspan><tspan dy="4" font-size="9">HX</tspan><tspan dy="-4">)</tspan><tspan dy="-5" font-size="9">2</tspan><tspan dy="5"></tspan><tspan class="k">]</tspan>
+        </text>
+        <text class="note fade" style="--d:1.3s" x="60" y="500">formula derived from the drawn topology · evaluated at any t</text>
+
+        <circle class="signal" r="3.5" style="offset-path: path('M520 225 H700 V150 H840 V225 H930 V180 H1050 V225 H1110'); animation-duration: 9s"/>
+        <circle class="signal" r="3.5" style="offset-path: path('M520 225 H700 V300 H840 V225 H930 V180 H1050 V225 H1110'); animation-duration: 12s; animation-delay: 4s"/>
+      </svg>
+      <figcaption class="sheet-caption">Drawing RBD-001 · the hierarchy an engineer builds in Strata, and the block diagram it evaluates bottom-up.</figcaption>
+    </figure>
+
+    <dl class="spec">
+      <div class="span-2">
+        <dt>Stack</dt>
+        <dd>
+          <ul class="tags">
+            <li><span class="tag">Go 1.25</span></li>
+            <li><span class="tag">chi</span></li>
+            <li><span class="tag">SQL Server 2022</span></li>
+            <li><span class="tag">Next.js 15</span></li>
+            <li><span class="tag">React 19</span></li>
+            <li><span class="tag">TypeScript</span></li>
+            <li><span class="tag">React Flow</span></li>
+            <li><span class="tag">Docker Compose</span></li>
+            <li><span class="tag">Prometheus</span></li>
+            <li><span class="tag">Grafana</span></li>
+            <li><span class="tag">k6</span></li>
+            <li><span class="tag">Caddy</span></li>
+            <li><span class="tag">GCP</span></li>
+          </ul>
+        </dd>
+      </div>
+      <div>
+        <dt>Source · API</dt>
+        <dd><a href="https://github.com/Galang17061/strata">Galang17061/strata</a></dd>
+      </div>
+      <div>
+        <dt>Source · Web</dt>
+        <dd><a href="https://github.com/Galang17061/strata-web">Galang17061/strata-web</a></dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="doc container">
+    <aside class="doc-index" aria-label="Sections">
+      <ol>
+        <li><a href="#overview"><span class="num">01</span>Overview</a></li>
+        <li><a href="#problem"><span class="num">02</span>Problem</a></li>
+        <li><a href="#built"><span class="num">03</span>What I built</a></li>
+        <li><a href="#arch"><span class="num">04</span>Architecture</a></li>
+        <li><a href="#results"><span class="num">05</span>Results</a></li>
+        <li><a href="#demo"><span class="num">06</span>Live demo</a></li>
+      </ol>
+    </aside>
+
+    <div class="doc-body">
+
+      <section class="section prose" id="overview" aria-labelledby="overview-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">01</span>Overview</p>
+          <h2 id="overview-title">What Strata is</h2>
+        </div>
+        <p class="lede">
+          Strata is a reliability analysis platform built around the reliability block
+          diagram method. An engineer models a system as a tree of subsystems and
+          components, wires the blocks in series, parallel or k-out-of-n, records every
+          failure a component has had, and Strata works out, from the components upward,
+          how likely each block and the whole system is to still be working after a given
+          number of running hours.
+        </p>
+        <p>
+          I built both halves: the Go API that does the mathematics and the Next.js app
+          engineers work in, plus the Docker and Google Cloud setup the demo runs on. The
+          launcher at the bottom of this page boots a real instance when you ask for it.
+        </p>
+      </section>
+
+      <section class="section prose" id="problem" aria-labelledby="problem-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">02</span>Problem</p>
+          <h2 id="problem-title">Reliability work still lives in spreadsheets</h2>
+        </div>
+        <p>
+          Failure records are scattered, distribution fitting is done by hand, and the
+          reliability of a whole system depends on how its blocks are wired, which a
+          spreadsheet cannot express. The tools that can are desktop-bound and expensive.
+        </p>
+        <ul>
+          <li>Every failure a component has had must be logged in one place before a fit means anything.</li>
+          <li>Series, parallel and k-out-of-n blocks compose differently, so the system formula has to follow the drawing.</li>
+          <li>Choosing a vendor for each slot under a budget means re-running every calculation for every combination.</li>
+        </ul>
+      </section>
+
+      <section class="section prose" id="built" aria-labelledby="built-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">03</span>What I built</p>
+          <h2 id="built-title">Five parts, one system</h2>
+        </div>
+
+        <h3>Reliability analytics</h3>
+        <p>
+          Weibull, exponential and Poisson models are fitted to each component's failure
+          log. Blocks are wired in series, parallel or k-out-of-n; Strata derives an
+          algebraic reliability formula from the drawn topology and evaluates it from the
+          components upward, at any number of running hours. Every system keeps versioned
+          snapshots, the last twenty taken automatically, so a change can be compared with
+          what came before.
+        </p>
+        <p class="formula-block">R<sub>2oo3</sub>(t) = 3R(t)<sup>2</sup> − 2R(t)<sup>3</sup> <span class="k">·</span> R<sub>series</sub> = ∏ R<sub>i</sub> <span class="k">·</span> R<sub>parallel</sub> = 1 − ∏ (1 − R<sub>i</sub>) <span class="k">·</span> R<sub>Weibull</sub>(t) = e<sup>−(t/η)<sup>β</sup></sup></p>
+
+        <figure class="figure draw">
+          <svg viewBox="0 0 640 300" role="img" aria-labelledby="weibull-title" focusable="false">
+            <title id="weibull-title">A Weibull probability density curve fitted over a histogram of failure times.</title>
+            <g class="axis" stroke-width="1">
+              <line x1="48" y1="256" x2="616" y2="256"/>
+              <line x1="48" y1="256" x2="48" y2="28"/>
+            </g>
+            <g class="bars">
+              <rect class="bar" x="50.0" y="239.5" width="47.6" height="16.5"/>
+              <rect class="bar" x="101.6" y="168.1" width="47.6" height="87.9"/>
+              <rect class="bar" x="153.3" y="112.7" width="47.6" height="143.3"/>
+              <rect class="bar" x="204.9" y="46.5" width="47.6" height="209.5"/>
+              <rect class="bar" x="256.5" y="58.7" width="47.6" height="197.3"/>
+              <rect class="bar" x="308.2" y="72.0" width="47.6" height="184.0"/>
+              <rect class="bar" x="359.8" y="152.9" width="47.6" height="103.1"/>
+              <rect class="bar" x="411.5" y="192.3" width="47.6" height="63.7"/>
+              <rect class="bar" x="463.1" y="229.8" width="47.6" height="26.2"/>
+              <rect class="bar" x="514.7" y="246.0" width="47.6" height="10.0"/>
+              <rect class="bar" x="566.4" y="253.5" width="47.6" height="2.5"/>
+            </g>
+            <path class="curve" pathLength="1" d="M48.0 256.0 L53.2 254.5 L58.3 251.9 L63.5 248.4 L68.7 244.3 L73.8 239.7 L79.0 234.6 L84.1 229.1 L89.3 223.2 L94.5 217.0 L99.6 210.5 L104.8 203.7 L110.0 196.8 L115.1 189.6 L120.3 182.3 L125.5 174.9 L130.6 167.5 L135.8 160.0 L140.9 152.4 L146.1 145.0 L151.3 137.5 L156.4 130.2 L161.6 123.0 L166.8 115.9 L171.9 109.1 L177.1 102.5 L182.3 96.1 L187.4 90.0 L192.6 84.3 L197.7 78.8 L202.9 73.8 L208.1 69.1 L213.2 64.8 L218.4 61.0 L223.6 57.6 L228.7 54.6 L233.9 52.1 L239.1 50.1 L244.2 48.5 L249.4 47.4 L254.5 46.8 L259.7 46.7 L264.9 47.0 L270.0 47.9 L275.2 49.1 L280.4 50.8 L285.5 53.0 L290.7 55.5 L295.9 58.4 L301.0 61.7 L306.2 65.4 L311.3 69.3 L316.5 73.6 L321.7 78.2 L326.8 82.9 L332.0 88.0 L337.2 93.2 L342.3 98.5 L347.5 104.0 L352.7 109.6 L357.8 115.3 L363.0 121.1 L368.1 126.9 L373.3 132.7 L378.5 138.4 L383.6 144.2 L388.8 149.8 L394.0 155.4 L399.1 160.9 L404.3 166.3 L409.5 171.6 L414.6 176.7 L419.8 181.6 L424.9 186.4 L430.1 191.0 L435.3 195.5 L440.4 199.7 L445.6 203.8 L450.8 207.7 L455.9 211.4 L461.1 214.9 L466.3 218.1 L471.4 221.3 L476.6 224.2 L481.7 226.9 L486.9 229.5 L492.1 231.9 L497.2 234.1 L502.4 236.1 L507.6 238.0 L512.7 239.8 L517.9 241.4 L523.1 242.9 L528.2 244.3 L533.4 245.5 L538.5 246.6 L543.7 247.7 L548.9 248.6 L554.0 249.4 L559.2 250.2 L564.4 250.9 L569.5 251.5 L574.7 252.0 L579.9 252.5 L585.0 253.0 L590.2 253.4 L595.3 253.7 L600.5 254.0 L605.7 254.3 L610.8 254.5 L616.0 254.7"/>
+            <g class="label-sm">
+              <text x="48" y="276">0</text>
+              <text x="600" y="276" text-anchor="end">t (h)</text>
+              <text x="40" y="34" text-anchor="end">f(t)</text>
+            </g>
+            <g class="label">
+              <text x="372" y="60">β = 2.5</text>
+              <text x="372" y="78">η = 1 200 h</text>
+            </g>
+          </svg>
+          <figcaption>Illustrative: a two-parameter Weibull fit over binned failure times. Shape β &gt; 1 means wear-out.</figcaption>
+        </figure>
+
+        <h3>Genetic-algorithm optimisation studio</h3>
+        <p>
+          Each component slot has a set of candidate vendors, each with its own failure
+          rate and unit cost. The studio runs a genetic algorithm over those choices with
+          roulette-wheel selection, single-point crossover, elitism and an early stop after
+          25 stalled generations. Three modes: maximise reliability, maximise reliability
+          within a budget, or trade cost against a reliability floor.
+        </p>
+        <p>
+          Searches are heavy, so a semaphore in the API caps how many run at once, two by
+          default with a short queue wait. When the studio is full the caller is told so
+          instead of the whole service slowing down.
+        </p>
+
+        <figure class="figure figure-wide draw ga">
+          <svg viewBox="0 0 640 330" role="img" aria-labelledby="ga-title" focusable="false">
+            <title id="ga-title">Genetic algorithm: a population of vendor assignments, one letter per component slot; single-point crossover and mutation produce a child; a chart of best reliability per generation rises and stops early once it stalls.</title>
+
+            <!-- left: population -->
+            <text class="label-sm fade" style="--d:0s" x="24" y="30">POPULATION · 700 GENOMES, 5 SHOWN · ONE LETTER = VENDOR FOR THAT SLOT</text>
+            <g class="genome fade" style="--d:.05s">
+              <text class="label-sm" x="50" y="70" text-anchor="end">01</text>
+              <rect class="gene" x="60" y="58" width="26" height="18"/><text class="gene-t" x="73" y="67">A</text>
+              <rect class="gene" x="90" y="58" width="26" height="18"/><text class="gene-t" x="103" y="67">C</text>
+              <rect class="gene" x="120" y="58" width="26" height="18"/><text class="gene-t" x="133" y="67">B</text>
+              <rect class="gene" x="150" y="58" width="26" height="18"/><text class="gene-t" x="163" y="67">A</text>
+              <rect class="gene" x="180" y="58" width="26" height="18"/><text class="gene-t" x="193" y="67">D</text>
+              <rect class="gene" x="210" y="58" width="26" height="18"/><text class="gene-t" x="223" y="67">B</text>
+              <rect class="gene" x="240" y="58" width="26" height="18"/><text class="gene-t" x="253" y="67">C</text>
+              <text class="label-sm" x="278" y="70">R 0.941 · elite</text>
+            </g>
+            <g class="genome fade" style="--d:.12s">
+              <text class="label-sm" x="50" y="98" text-anchor="end">02</text>
+              <rect class="gene" x="60" y="86" width="26" height="18"/><text class="gene-t" x="73" y="95">B</text>
+              <rect class="gene" x="90" y="86" width="26" height="18"/><text class="gene-t" x="103" y="95">A</text>
+              <rect class="gene" x="120" y="86" width="26" height="18"/><text class="gene-t" x="133" y="95">C</text>
+              <rect class="gene" x="150" y="86" width="26" height="18"/><text class="gene-t" x="163" y="95">D</text>
+              <rect class="gene" x="180" y="86" width="26" height="18"/><text class="gene-t" x="193" y="95">A</text>
+              <rect class="gene" x="210" y="86" width="26" height="18"/><text class="gene-t" x="223" y="95">C</text>
+              <rect class="gene" x="240" y="86" width="26" height="18"/><text class="gene-t" x="253" y="95">B</text>
+              <text class="label-sm" x="278" y="98">R 0.933</text>
+            </g>
+            <g class="genome fade" style="--d:.19s">
+              <text class="label-sm" x="50" y="126" text-anchor="end">03</text>
+              <rect class="gene" x="60" y="114" width="26" height="18"/><text class="gene-t" x="73" y="123">A</text>
+              <rect class="gene" x="90" y="114" width="26" height="18"/><text class="gene-t" x="103" y="123">A</text>
+              <rect class="gene" x="120" y="114" width="26" height="18"/><text class="gene-t" x="133" y="123">D</text>
+              <rect class="gene" x="150" y="114" width="26" height="18"/><text class="gene-t" x="163" y="123">B</text>
+              <rect class="gene" x="180" y="114" width="26" height="18"/><text class="gene-t" x="193" y="123">C</text>
+              <rect class="gene" x="210" y="114" width="26" height="18"/><text class="gene-t" x="223" y="123">B</text>
+              <rect class="gene" x="240" y="114" width="26" height="18"/><text class="gene-t" x="253" y="123">A</text>
+              <text class="label-sm" x="278" y="126">R 0.927</text>
+            </g>
+            <g class="genome fade" style="--d:.26s">
+              <text class="label-sm" x="50" y="154" text-anchor="end">04</text>
+              <rect class="gene" x="60" y="142" width="26" height="18"/><text class="gene-t" x="73" y="151">C</text>
+              <rect class="gene" x="90" y="142" width="26" height="18"/><text class="gene-t" x="103" y="151">B</text>
+              <rect class="gene" x="120" y="142" width="26" height="18"/><text class="gene-t" x="133" y="151">B</text>
+              <rect class="gene" x="150" y="142" width="26" height="18"/><text class="gene-t" x="163" y="151">A</text>
+              <rect class="gene" x="180" y="142" width="26" height="18"/><text class="gene-t" x="193" y="151">D</text>
+              <rect class="gene" x="210" y="142" width="26" height="18"/><text class="gene-t" x="223" y="151">D</text>
+              <rect class="gene" x="240" y="142" width="26" height="18"/><text class="gene-t" x="253" y="151">C</text>
+              <text class="label-sm" x="278" y="154">R 0.902</text>
+            </g>
+            <g class="genome fade" style="--d:.33s">
+              <text class="label-sm" x="50" y="182" text-anchor="end">05</text>
+              <rect class="gene" x="60" y="170" width="26" height="18"/><text class="gene-t" x="73" y="179">D</text>
+              <rect class="gene" x="90" y="170" width="26" height="18"/><text class="gene-t" x="103" y="179">C</text>
+              <rect class="gene" x="120" y="170" width="26" height="18"/><text class="gene-t" x="133" y="179">A</text>
+              <rect class="gene" x="150" y="170" width="26" height="18"/><text class="gene-t" x="163" y="179">C</text>
+              <rect class="gene" x="180" y="170" width="26" height="18"/><text class="gene-t" x="193" y="179">B</text>
+              <rect class="gene" x="210" y="170" width="26" height="18"/><text class="gene-t" x="223" y="179">A</text>
+              <rect class="gene" x="240" y="170" width="26" height="18"/><text class="gene-t" x="253" y="179">D</text>
+              <text class="label-sm" x="278" y="182">R 0.871 · dropped</text>
+            </g>
+
+            <!-- crossover and mutation -->
+            <text class="label-sm fade" style="--d:.4s" x="24" y="218">CROSSOVER · SINGLE POINT, THEN MUTATION</text>
+            <g class="genome fade" style="--d:.45s">
+              <text class="label-sm" x="50" y="244" text-anchor="end">P1</text>
+              <rect class="gene" x="60" y="232" width="26" height="18"/><text class="gene-t" x="73" y="241">A</text>
+              <rect class="gene" x="90" y="232" width="26" height="18"/><text class="gene-t" x="103" y="241">C</text>
+              <rect class="gene" x="120" y="232" width="26" height="18"/><text class="gene-t" x="133" y="241">B</text>
+              <rect class="gene" x="150" y="232" width="26" height="18"/><text class="gene-t" x="163" y="241">A</text>
+              <rect class="gene" x="180" y="232" width="26" height="18"/><text class="gene-t" x="193" y="241">D</text>
+              <rect class="gene" x="210" y="232" width="26" height="18"/><text class="gene-t" x="223" y="241">B</text>
+              <rect class="gene" x="240" y="232" width="26" height="18"/><text class="gene-t" x="253" y="241">C</text>
+            </g>
+            <g class="genome fade" style="--d:.5s">
+              <text class="label-sm" x="50" y="268" text-anchor="end">P2</text>
+              <rect class="gene" x="60" y="256" width="26" height="18"/><text class="gene-t" x="73" y="265">B</text>
+              <rect class="gene" x="90" y="256" width="26" height="18"/><text class="gene-t" x="103" y="265">A</text>
+              <rect class="gene" x="120" y="256" width="26" height="18"/><text class="gene-t" x="133" y="265">C</text>
+              <rect class="gene" x="150" y="256" width="26" height="18"/><text class="gene-t" x="163" y="265">D</text>
+              <rect class="gene" x="180" y="256" width="26" height="18"/><text class="gene-t" x="193" y="265">A</text>
+              <rect class="gene" x="210" y="256" width="26" height="18"/><text class="gene-t" x="223" y="265">C</text>
+              <rect class="gene" x="240" y="256" width="26" height="18"/><text class="gene-t" x="253" y="265">B</text>
+            </g>
+            <line class="ga-cut fade" style="--d:.55s" x1="88" y1="228" x2="88" y2="278"/>
+            <g class="genome fade" style="--d:.6s">
+              <text class="label-sm" x="50" y="304" text-anchor="end">child</text>
+              <rect class="gene" x="60" y="292" width="26" height="18"/><text class="gene-t" x="73" y="301">A</text>
+              <rect class="gene" x="90" y="292" width="26" height="18"/><text class="gene-t" x="103" y="301">C</text>
+              <rect class="gene" x="120" y="292" width="26" height="18"/><text class="gene-t" x="133" y="301">B</text>
+              <rect class="gene" x="150" y="292" width="26" height="18"/><text class="gene-t" x="163" y="301">A</text>
+              <rect class="gene" x="180" y="292" width="26" height="18"/><text class="gene-t" x="193" y="301">A</text>
+              <rect class="gene" x="210" y="292" width="26" height="18"/><text class="gene-t" x="223" y="301">C</text>
+              <rect class="gene" x="240" y="292" width="26" height="18"/><text class="gene-t" x="253" y="301">B</text>
+              <text class="label-sm" x="278" y="304">mutation p = 0.4</text>
+            </g>
+            <rect class="ga-mut fade" style="--d:.65s" x="58" y="290" width="30" height="22" rx="2"/>
+
+            <!-- right: best reliability per generation -->
+            <g transform="translate(24 0)">
+            <text class="label-sm fade" style="--d:.2s" x="372" y="52">BEST R(t) PER GENERATION</text>
+            <g class="axis" stroke-width="1">
+              <line x1="370" y1="280" x2="592" y2="280"/>
+              <line x1="370" y1="280" x2="370" y2="60"/>
+            </g>
+            <line class="ga-target fade" style="--d:.3s" x1="370" y1="84" x2="592" y2="84"/>
+            <text class="label-sm fade" style="--d:.3s" x="590" y="79" text-anchor="end">target R = 0.98</text>
+            <line class="ga-target fade" style="--d:.9s" x1="514" y1="60" x2="514" y2="280"/>
+            <text class="label-sm fade" style="--d:.9s" x="518" y="272">early stop</text>
+            <text class="label-sm fade" style="--d:.9s" x="518" y="284">25 stalled gen.</text>
+            <path class="curve" pathLength="1" d="M370 262 C378 262 382 240 388 210 C394 180 396 160 404 150 C412 140 414 138 420 134 C428 128 430 126 436 120 C444 112 446 111 452 108 C460 104 462 104 468 102 C476 100 478 100 484 99 C492 98 494 98 500 97 C508 96 510 96 514 96"/>
+            <g class="label-sm fade" style="--d:.2s">
+              <text x="370" y="296">0</text>
+              <text x="590" y="296" text-anchor="end">1 500 generations</text>
+              <text x="364" y="284" text-anchor="end">0.80</text>
+              <text x="364" y="88" text-anchor="end">0.98</text>
+            </g>
+            <circle class="signal ga-run" r="3.5" style="offset-path: path('M370 262 C378 262 382 240 388 210 C394 180 396 160 404 150 C412 140 414 138 420 134 C428 128 430 126 436 120 C444 112 446 111 452 108 C460 104 462 104 468 102 C476 100 478 100 484 99 C492 98 494 98 500 97 C508 96 510 96 514 96')"/>
+            </g>
+          </svg>
+          <figcaption>Illustrative: 7 slots × 4 candidate vendors is 16 384 combinations. Roulette-wheel selection keeps the fittest, single-point crossover mixes two parents, mutation flips a gene, and the run stops once the best result has not improved for 25 generations.</figcaption>
+        </figure>
+
+        <h3>Backend and data</h3>
+        <p>
+          A Go API on chi and sqlx, backed by SQL Server 2022 and shipped as a single static
+          binary. Reliability arithmetic uses decimals rather than floats. JWT sign-in with
+          per-module rights, an audit trail of requests, Excel import of master data, and a
+          generated OpenAPI spec served with Swagger UI. The process exposes its own
+          Prometheus metrics.
+        </p>
+
+        <h3>Frontend</h3>
+        <p>
+          Next.js 15 with React 19, exported as a static site and served by nginx. The
+          workspace has a React Flow canvas for wiring blocks, a component sheet with the
+          failure log and its fit, Recharts plots with PNG and SVG export, and the system
+          formula rendered with KaTeX. Tailwind 4 and shadcn/ui underneath, with a guided
+          tour for first-time users.
+        </p>
+
+        <h3>Operations</h3>
+        <p>
+          Nine Compose services: database, API, web, a twin test database for load runs,
+          Mailpit, Uptime Kuma, Prometheus, Grafana and a k6 runner. Caddy terminates TLS in
+          front of it on a Google Cloud VM that a small wake service starts on demand and
+          shuts down after thirty idle minutes.
+        </p>
+      </section>
+
+      <section class="section prose" id="arch" aria-labelledby="arch-title-h" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">04</span>Architecture</p>
+          <h2 id="arch-title-h">How the pieces connect</h2>
+        </div>
+        <p>
+          A browser talks to Caddy, which terminates TLS and routes to the static Next.js
+          build served by nginx and to the Go API. The API does all reliability
+          computation and persists to SQL Server. Prometheus scrapes the API every fifteen
+          seconds and Grafana reads from it. All of it runs as containers on one Google
+          Cloud VM that the demo launcher can start on request.
+        </p>
+
+        <figure class="figure figure-wide draw">
+          <svg viewBox="0 0 640 300" role="img" aria-labelledby="arch-title" focusable="false">
+            <title id="arch-title">Architecture: browser to Caddy, then to the static web build on nginx and to the Go API; the API talks to SQL Server; Prometheus scrapes the API. Web, API, database and Prometheus run as Docker containers on one GCP VM.</title>
+            <rect class="enclosure fade" style="--d:0s" x="284" y="40" width="332" height="236" rx="6"/>
+            <text class="label-sm fade" style="--d:0s" x="300" y="60">GCP VM · Docker Compose</text>
+            <g class="edges" stroke="currentColor" stroke-width="1.5">
+              <path class="edge" pathLength="1" style="--d:.1s"  d="M112 144 H156"/>
+              <path class="edge" pathLength="1" style="--d:.3s"  d="M244 144 C280 144 280 96 312 96"/>
+              <path class="edge" pathLength="1" style="--d:.3s"  d="M244 144 C280 144 280 182 312 182"/>
+              <path class="edge" pathLength="1" style="--d:.5s"  d="M360 118 V160"/>
+              <path class="edge" pathLength="1" style="--d:.6s"  d="M408 182 H480"/>
+              <path class="edge" pathLength="1" style="--d:.75s" d="M480 246 C440 246 372 240 372 204"/>
+            </g>
+            <g class="nodes" fill="var(--paper)" stroke="currentColor" stroke-width="1.5">
+              <rect class="node" style="--d:0s"   x="24"  y="122" width="88"  height="44" rx="3"/>
+              <rect class="node" style="--d:.15s" x="156" y="122" width="88"  height="44" rx="3"/>
+              <rect class="node" style="--d:.35s" x="312" y="74"  width="96"  height="44" rx="3"/>
+              <rect class="node" style="--d:.35s" x="312" y="160" width="96"  height="44" rx="3"/>
+              <rect class="node" style="--d:.65s" x="480" y="160" width="104" height="44" rx="3"/>
+              <rect class="node" style="--d:.8s"  x="480" y="226" width="104" height="40" rx="3"/>
+            </g>
+            <g class="label" text-anchor="middle" dominant-baseline="middle" stroke="none">
+              <text class="fade" style="--d:0s"   x="68"  y="145">Browser</text>
+              <text class="fade" style="--d:.15s" x="200" y="145">Caddy · TLS</text>
+              <text class="fade" style="--d:.35s" x="360" y="97">Web · nginx</text>
+              <text class="fade" style="--d:.35s" x="360" y="183">Go API</text>
+              <text class="fade" style="--d:.65s" x="532" y="183">SQL Server</text>
+              <text class="fade" style="--d:.8s"  x="532" y="247">Prometheus</text>
+            </g>
+          </svg>
+          <figcaption>Request path and container boundary. Grafana, Mailpit, Uptime Kuma and the wake service that starts the VM are left out for clarity.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section prose" id="results" aria-labelledby="results-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">05</span>Results</p>
+          <h2 id="results-title">Measured, not estimated</h2>
+        </div>
+        <table class="results">
+          <tbody>
+            <tr><th scope="row">k6 stress profile</th><td>50 → 500 virtual users, cross-region</td></tr>
+            <tr><th scope="row">Users reached at 0% errors</th><td>500</td></tr>
+            <tr><th scope="row">Failure threshold in the rig</th><td>&lt; 2% requests, p95 read &lt; 1 s</td></tr>
+            <tr><th scope="row">GA defaults</th><td>population 700, up to 1 500 generations</td></tr>
+            <tr><th scope="row">Concurrent GA searches</th><td>2, then queue</td></tr>
+            <tr><th scope="row">Automatic snapshots kept</th><td>20 per system</td></tr>
+            <tr><th scope="row">Demo cold start</th><td>≈ 90 s</td></tr>
+            <tr><th scope="row">Demo idle shutdown</th><td>30 min</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section prose" id="demo" aria-labelledby="demo-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">06</span>Live demo</p>
+          <h2 id="demo-title">Try it on a real server</h2>
+        </div>
+        <p>
+          The demo boots its own server on Google Cloud when you click. A cold start takes
+          about 90 seconds, then you'll be redirected automatically. It shuts itself down
+          after 30 minutes of quiet. Nothing runs until you ask for it.
+        </p>
+        <div class="launcher">
+          <button class="btn btn-primary" id="launch" type="button">Launch live demo</button>
+          <p class="launcher-status" id="launch-status" role="status" aria-live="polite"></p>
+          <div class="launcher-progress" id="launch-progress" aria-hidden="true"><i></i></div>
+        </div>
+      </section>
+
+      <nav class="pager" aria-label="Project navigation">
+        <a class="arrow-link" href="../../index.html#work">← All projects</a>
+      </nav>
+
+    </div>
+  </div>
+
+</article>
+</main>
+
+<footer class="footer container">
+  <span>© 2026 Galang Reformantoko</span>
+  <span>Rev 2026.09 · static site, demo server wakes on request</span>
+</footer>
+
+<script src="../../assets/js/reveal.js" defer></script>
+<script src="../../assets/js/demo.js" defer></script>
+</body>
+</html>
