@@ -3,181 +3,346 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Galang — Software Engineer</title>
-<meta name="description" content="Portfolio of Galang — engineer building reliability and maintenance engineering software.">
-<style>
-  :root {
-    --bg: #0b0f14;
-    --panel: #121821;
-    --line: #1f2937;
-    --text: #e5e9f0;
-    --muted: #8b98a9;
-    --accent: #4fd1a5;
-    --accent-dim: #2c7a62;
-  }
-  * { box-sizing: border-box; margin: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  main { max-width: 880px; margin: 0 auto; padding: 56px 24px 80px; }
-  header h1 { font-size: 2rem; letter-spacing: -0.02em; }
-  header .role { color: var(--accent); font-weight: 600; margin-top: 4px; }
-  header p.intro { color: var(--muted); margin-top: 14px; max-width: 60ch; }
-  .links { margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap; }
-  .links a {
-    color: var(--text); text-decoration: none; font-size: 0.92rem;
-    border: 1px solid var(--line); border-radius: 8px; padding: 7px 14px;
-    transition: border-color .15s;
-  }
-  .links a:hover { border-color: var(--accent); }
-  h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 56px 0 18px; }
-  .card {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
-    padding: 28px; margin-bottom: 20px;
-  }
-  .card h3 { font-size: 1.35rem; letter-spacing: -0.01em; }
-  .card .tagline { color: var(--accent); font-size: 0.95rem; margin-top: 2px; }
-  .card p { color: var(--muted); margin-top: 12px; }
-  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-  .badges span {
-    font-size: 0.78rem; color: var(--text); background: #0e1420;
-    border: 1px solid var(--line); border-radius: 999px; padding: 3px 11px;
-  }
-  ul.feats { margin: 14px 0 0 18px; color: var(--muted); }
-  ul.feats li { margin-top: 6px; }
-  .launch-row { margin-top: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  button#launch {
-    font: inherit; font-weight: 700; cursor: pointer;
-    color: #06251b; background: var(--accent);
-    border: 0; border-radius: 10px; padding: 12px 22px;
-    transition: transform .1s, background .15s;
-  }
-  button#launch:hover { background: #63e0b5; }
-  button#launch:active { transform: scale(0.98); }
-  button#launch:disabled { background: var(--accent-dim); cursor: wait; }
-  #status { color: var(--muted); font-size: 0.92rem; min-height: 1.4em; }
-  #status.err { color: #f2807a; }
-  .bar { height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; margin-top: 14px; display: none; }
-  .bar i { display: block; height: 100%; width: 0%; background: var(--accent); transition: width .8s linear; }
-  .note { font-size: 0.83rem; color: var(--muted); margin-top: 14px; opacity: 0.85; }
-  footer { margin-top: 70px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 22px; }
-</style>
+<title>Galang Reformantoko — Backend Developer</title>
+<meta name="description" content="Galang Reformantoko is a backend developer in Jakarta with four years of experience building enterprise systems for oil & gas and rail: .NET and Laravel APIs, Clean Architecture, reliability engineering and CI/CD.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Galang Reformantoko — Backend Developer">
+<meta property="og:description" content="Backend engineer for industries where downtime is expensive. .NET, Laravel, Go, reliability engineering.">
+<meta name="theme-color" content="#f7f6f2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f7f6f2'/%3E%3Cpath d='M3 16h6M23 16h6M9 16c4 0 4-6 8-6h6M9 16c4 0 4 6 8 6h6' fill='none' stroke='%2314171a' stroke-width='2'/%3E%3Ccircle cx='23' cy='10' r='2.5' fill='%230f6e5c'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,400&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/motion.css">
+<script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
-<main>
-  <header>
-    <h1>Galang</h1>
-    <div class="role">Software Engineer</div>
-    <p class="intro">
-      I build engineering software end to end — from reliability mathematics and
-      backend services in Go, to modern web frontends, to the cloud infrastructure
-      they run on.
-    </p>
-    <div class="links">
-      <a href="https://github.com/Galang17061">GitHub</a>
-      <a href="mailto:reformantoko@gmail.com">Email</a>
-    </div>
-  </header>
 
-  <h2>Featured Project</h2>
-  <div class="card">
-    <h3>Strata</h3>
-    <div class="tagline">Reliability, Availability &amp; Maintainability (RAMS) platform</div>
-    <p>
-      A full-stack SaaS for reliability engineering: model plant systems as
-      reliability block diagrams, fit failure distributions to field data, and let a
-      genetic-algorithm studio search for the optimal maintenance strategy.
-    </p>
-    <ul class="feats">
-      <li>Go backend, Next.js frontend, SQL Server — fully containerised</li>
-      <li>Reliability analytics: Weibull/exponential/Poisson fitting, RBD roll-ups, snapshots &amp; versioning</li>
-      <li>Genetic-algorithm optimization studio with concurrency gating</li>
-      <li>Load-tested to 500 concurrent users at 0% errors (k6, cross-region)</li>
+<header class="container">
+  <nav class="nav" aria-label="Primary">
+    <a class="wordmark" href="index.html" aria-current="page">Galang</a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="https://github.com/Galang17061" rel="me">GitHub</a></li>
+      <li><a href="mailto:reformantoko@gmail.com">Email</a></li>
     </ul>
-    <div class="badges">
-      <span>Go</span><span>Next.js</span><span>TypeScript</span><span>SQL Server</span>
-      <span>Docker</span><span>Caddy</span><span>k6</span><span>Prometheus</span><span>GCP</span>
-    </div>
+  </nav>
+</header>
 
-    <div class="launch-row">
-      <button id="launch">🚀 Launch Live Demo</button>
-      <div id="status"></div>
+<main>
+
+  <section class="hero container" aria-labelledby="hero-title">
+    <div class="hero-split">
+      <div class="hero-main">
+        <p class="eyebrow">Galang Reformantoko · Full-stack engineer · Jakarta</p>
+        <h1 id="hero-title">Backend engineer for industries where downtime is <em>expensive.</em></h1>
+        <p class="lede">
+          Four years building enterprise systems for oil &amp; gas and rail: .NET and
+          Laravel APIs on Clean Architecture, reliability engineering, and the CI/CD
+          that ships them. A mathematics degree underneath.
+        </p>
+        <dl class="hero-facts">
+          <div><dt>Based</dt><dd>Jakarta Pusat</dd></div>
+          <div><dt>Stack</dt><dd>.NET · Laravel · Go</dd></div>
+          <div><dt>Since</dt><dd class="tabular">2021</dd></div>
+        </dl>
+        <p class="cta"><a class="arrow-link" href="#work">→ Selected work</a></p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <!-- Full-stack orrery: data at the core, domain, API, interface outermost. A request travels in, a response travels out. -->
+        <svg class="topo orrery" viewBox="0 0 720 640" focusable="false">
+          <defs>
+            <path id="ring-lbl-1" d="M281 320 a79 79 0 1 1 158 0 a79 79 0 1 1 -158 0"/>
+            <path id="ring-lbl-2" d="M219 320 a141 141 0 1 0 282 0 a141 141 0 1 0 -282 0"/>
+            <path id="ring-lbl-3" d="M131 320 a229 229 0 1 1 458 0 a229 229 0 1 1 -458 0"/>
+            <path id="ring-lbl-4" d="M70 320 a290 290 0 1 0 580 0 a290 290 0 1 0 -580 0"/>
+          </defs>
+
+          <!-- rings, inner to outer -->
+          <circle class="ring" pathLength="1" style="--d:0s"   cx="360" cy="320" r="70"/>
+          <circle class="ring" pathLength="1" style="--d:.15s" cx="360" cy="320" r="145"/>
+          <circle class="ring" pathLength="1" style="--d:.3s"  cx="360" cy="320" r="220"/>
+          <circle class="ring" pathLength="1" style="--d:.45s" cx="360" cy="320" r="295"/>
+
+          <!-- layer names along the rings -->
+          <text class="ring-label fade" style="--d:.5s"><textPath href="#ring-lbl-1" startOffset="25%" text-anchor="middle">Data · SQL Server · MySQL · Postgres</textPath></text>
+          <text class="ring-label fade" style="--d:.6s"><textPath href="#ring-lbl-2" startOffset="25%" text-anchor="middle">Domain · Clean Architecture · CQRS</textPath></text>
+          <text class="ring-label fade" style="--d:.7s"><textPath href="#ring-lbl-3" startOffset="25%" text-anchor="middle">API · ASP.NET Core · Laravel · Go</textPath></text>
+          <text class="ring-label fade" style="--d:.8s"><textPath href="#ring-lbl-4" startOffset="25%" text-anchor="middle">Interface · Next.js · React · TypeScript</textPath></text>
+
+          <!-- edges between layers -->
+          <g class="edges">
+            <path class="edge" pathLength="1" style="--d:.6s"  d="M586 130 C580 175 574 205 567 245"/>
+            <path class="edge" pathLength="1" style="--d:.7s"  d="M567 245 C545 285 520 320 503 345"/>
+            <path class="edge" pathLength="1" style="--d:.8s"  d="M503 345 C470 320 420 285 395 259"/>
+            <path class="edge" pathLength="1" style="--d:.9s"  d="M395 259 C385 280 372 300 360 320"/>
+            <path class="edge" pathLength="1" style="--d:.7s"  d="M83 219 C130 190 180 160 234 140"/>
+            <path class="edge" pathLength="1" style="--d:.8s"  d="M234 140 C200 220 200 310 234 393"/>
+            <path class="edge" pathLength="1" style="--d:.9s"  d="M250 511 C240 470 236 430 234 393"/>
+            <path class="edge" pathLength="1" style="--d:1s"   d="M234 393 C250 370 270 350 291 332"/>
+            <path class="edge" pathLength="1" style="--d:1s"   d="M291 332 C315 330 340 325 360 320"/>
+          </g>
+
+          <!-- nodes -->
+          <g class="nodes">
+            <circle class="core fade" style="--d:.2s" cx="360" cy="320" r="6"/>
+            <text class="nl fade" style="--d:.2s" x="360" y="343" text-anchor="middle">data</text>
+
+            <circle class="node" style="--d:.5s" cx="395" cy="259" r="5"/>
+            <text class="nl fade" style="--d:.5s" x="407" y="256">queries</text>
+            <circle class="node" style="--d:.5s" cx="291" cy="332" r="5"/>
+            <text class="nl fade" style="--d:.5s" x="279" y="336" text-anchor="end">cache</text>
+
+            <circle class="node" style="--d:.65s" cx="503" cy="345" r="5"/>
+            <text class="nl fade" style="--d:.65s" x="515" y="341">domain rules</text>
+            <text class="nl2 fade" style="--d:.65s" x="515" y="355">reliability · approvals</text>
+            <circle class="node" style="--d:.65s" cx="234" cy="393" r="5"/>
+            <text class="nl fade" style="--d:.65s" x="222" y="389" text-anchor="end">workflows</text>
+            <text class="nl2 fade" style="--d:.65s" x="222" y="403" text-anchor="end">audit trail · versioning</text>
+
+            <circle class="node" style="--d:.8s" cx="567" cy="245" r="5"/>
+            <text class="nl fade" style="--d:.8s" x="579" y="241">REST</text>
+            <text class="nl2 fade" style="--d:.8s" x="579" y="255">OpenAPI · JWT</text>
+            <circle class="node" style="--d:.8s" cx="234" cy="140" r="5"/>
+            <text class="nl fade" style="--d:.8s" x="222" y="136" text-anchor="end">jobs</text>
+            <text class="nl2 fade" style="--d:.8s" x="222" y="150" text-anchor="end">queues · events</text>
+            <circle class="node" style="--d:.8s" cx="250" cy="511" r="5"/>
+            <text class="nl fade" style="--d:.8s" x="238" y="515" text-anchor="end">CI · deploy</text>
+            <text class="nl2 fade" style="--d:.8s" x="238" y="529" text-anchor="end">Docker · GitHub Actions</text>
+
+            <circle class="node" style="--d:.95s" cx="586" cy="130" r="5"/>
+            <text class="nl fade" style="--d:.95s" x="598" y="126">browser</text>
+            <text class="nl2 fade" style="--d:.95s" x="598" y="140">Next.js · React</text>
+            <circle class="node" style="--d:.95s" cx="83" cy="219" r="5"/>
+            <text class="nl fade" style="--d:.95s" x="71" y="215" text-anchor="end">mobile</text>
+            <text class="nl2 fade" style="--d:.95s" x="71" y="229" text-anchor="end">responsive</text>
+          </g>
+
+          <!-- request in, response out -->
+          <circle class="signal" r="3.5" style="offset-path: path('M586 130 C580 175 574 205 567 245 C545 285 520 320 503 345 C470 320 420 285 395 259 C385 280 372 300 360 320'); animation-duration: 6s"/>
+          <circle class="signal" r="3.5" style="offset-path: path('M586 130 C580 175 574 205 567 245 C545 285 520 320 503 345 C470 320 420 285 395 259 C385 280 372 300 360 320'); animation-duration: 6s; animation-delay: 4.2s; animation-direction: reverse"/>
+        </svg>
+      </div>
     </div>
-    <div class="bar" id="bar"><i id="fill"></i></div>
-    <p class="note">
-      The demo boots its own server on Google Cloud when you click — a cold start
-      takes about 90 seconds, then you'll be redirected automatically. It shuts
-      itself down after 30 minutes of quiet.
-    </p>
+  </section>
+
+  <div class="doc container">
+    <aside class="doc-index" aria-label="Sections">
+      <ol>
+        <li><a href="#work"><span class="num">01</span>Selected work</a></li>
+        <li><a href="#experience"><span class="num">02</span>Experience</a></li>
+        <li><a href="#capabilities"><span class="num">03</span>Capabilities</a></li>
+        <li><a href="#background"><span class="num">04</span>Background</a></li>
+        <li><a href="#contact"><span class="num">05</span>Contact</a></li>
+      </ol>
+    </aside>
+
+    <div class="doc-body">
+
+      <section class="section" id="work" aria-labelledby="work-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">01</span>Selected work</p>
+          <h2 id="work-title">Projects with a written brief</h2>
+        </div>
+        <ul class="rows">
+          <li>
+            <a class="row" href="projects/strata/index.html">
+              <span class="row-num">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M2 12h5M17 12h5M7 12c3 0 3-5 6-5h4M7 12c3 0 3 5 6 5h4"/>
+                  <rect class="node-live" x="13.5" y="4.5" width="6" height="5" rx="1"/>
+                  <rect x="13.5" y="14.5" width="6" height="5" rx="1"/>
+                </svg>
+                01
+              </span>
+              <span class="row-main">
+                <span class="row-title">Strata</span>
+                <span class="row-desc">Independent project. A reliability analysis platform: block diagrams with series, parallel and k-out-of-n wiring, Weibull and exponential fits on failure logs, and a genetic-algorithm vendor optimiser. Live demo included.</span>
+              </span>
+              <ul class="tags row-tags">
+                <li><span class="tag">Go</span></li>
+                <li><span class="tag">Next.js</span></li>
+                <li><span class="tag">SQL Server</span></li>
+                <li><span class="tag">Docker</span></li>
+                <li><span class="tag">GCP</span></li>
+              </ul>
+              <span class="row-year tabular">2026</span>
+              <span class="row-cta">→ Read the brief</span>
+            </a>
+          </li>
+        </ul>
+        <p class="rows-note">More briefs are being written. The work below is described in short form.</p>
+      </section>
+
+      <section class="section" id="experience" aria-labelledby="xp-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">02</span>Experience</p>
+          <h2 id="xp-title">Where I've worked</h2>
+        </div>
+
+        <dl class="tl">
+          <div class="is-current">
+            <dt>
+              <span class="tl-when">Sep 2025 — present</span>
+              <span class="tl-org">Pertamina Hulu Rokan</span>
+            </dt>
+            <dd>
+              <h3>Backend Developer</h3>
+              <p class="tl-project"><strong>PHR-PDM</strong>: predictive and preventive maintenance backend for oil &amp; gas facilities.</p>
+              <ul>
+                <li>.NET 8 REST API on Clean Architecture and CQRS with MediatR; Entity Framework Core on MySQL.</li>
+                <li>150+ reporting modules across 13 non-destructive testing methodologies, serving hundreds of concurrent users.</li>
+                <li>Five-level approval workflow over hundreds of job positions, with a full audit trail.</li>
+                <li>Consolidates inspection data from third-party contractors into one source for maintenance decisions.</li>
+                <li>CI/CD on GitHub Actions with Digital Ocean-hosted runners; unit tests gate every release.</li>
+              </ul>
+              <ul class="tags">
+                <li><span class="tag">C#</span></li>
+                <li><span class="tag">.NET 8</span></li>
+                <li><span class="tag">CQRS · MediatR</span></li>
+                <li><span class="tag">EF Core</span></li>
+                <li><span class="tag">MySQL</span></li>
+                <li><span class="tag">GitHub Actions</span></li>
+              </ul>
+            </dd>
+          </div>
+
+          <div class="is-current">
+            <dt>
+              <span class="tl-when">Sep 2025 — present</span>
+              <span class="tl-org">PT Kereta Api Indonesia</span>
+            </dt>
+            <dd>
+              <h3>Backend Developer</h3>
+              <p class="tl-project"><strong>AIRMS</strong>: asset integrity and reliability analytics for railway assets.</p>
+              <ul>
+                <li>.NET 6 and SQL Server. Reliability block diagram engine with series, parallel and k-out-of-n blocks, Weibull and exponential models.</li>
+                <li>Bottom-up reliability calculation across a multi-level asset hierarchy, from component to system.</li>
+                <li>Hardened the hydrate-sync API that creates, updates and deletes tree nodes in one request, with auto-levelling and safe cascade deletes.</li>
+                <li>Batched repository operations for large RBD topologies; removed hundreds of lines of dead code under xUnit and FluentAssertions.</li>
+              </ul>
+              <ul class="tags">
+                <li><span class="tag">C#</span></li>
+                <li><span class="tag">.NET 6</span></li>
+                <li><span class="tag">SQL Server</span></li>
+                <li><span class="tag">xUnit</span></li>
+                <li><span class="tag">FluentAssertions</span></li>
+              </ul>
+            </dd>
+          </div>
+
+          <div>
+            <dt>
+              <span class="tl-when">Dec 2022 — Sep 2025</span>
+              <span class="tl-org">PT Bonofactum, Denpasar</span>
+            </dt>
+            <dd>
+              <h3>PHP Developer</h3>
+              <ul>
+                <li>Built and shipped web applications on PHP, Laravel and MySQL, integrating several third-party APIs.</li>
+                <li>Upgraded a legacy system from PHP 7.3 to 8.3 and Laravel 8 to current, using Docker to isolate the migration, then deployed it with zero downtime.</li>
+                <li><strong>Manobo</strong>: an in-house integration platform connecting warehousing, reporting and external APIs across teams.</li>
+              </ul>
+              <ul class="tags">
+                <li><span class="tag">PHP</span></li>
+                <li><span class="tag">Laravel</span></li>
+                <li><span class="tag">MySQL</span></li>
+                <li><span class="tag">Docker</span></li>
+              </ul>
+            </dd>
+          </div>
+
+          <div>
+            <dt>
+              <span class="tl-when">Oct 2021 — Dec 2022</span>
+              <span class="tl-org">PT BITS Miliartha, Sidoarjo</span>
+            </dt>
+            <dd>
+              <h3>Backend Developer</h3>
+              <ul>
+                <li><strong>KlikWa</strong>: a multi-agent WhatsApp engine that lets many customer-service agents share one number, in Go and Node.js on MongoDB and PostgreSQL.</li>
+                <li>Integrated third-party APIs from external applications into the web platform.</li>
+              </ul>
+              <ul class="tags">
+                <li><span class="tag">Go</span></li>
+                <li><span class="tag">Node.js</span></li>
+                <li><span class="tag">MongoDB</span></li>
+                <li><span class="tag">PostgreSQL</span></li>
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="section" id="capabilities" aria-labelledby="caps-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">03</span>Capabilities</p>
+          <h2 id="caps-title">What I work with</h2>
+        </div>
+        <dl class="cells">
+          <div>
+            <dt><span class="cell-num">A1</span>Backend</dt>
+            <dd>C# and ASP.NET Core 6 to 8, PHP and Laravel, Go, Node.js. Clean Architecture, CQRS with MediatR, REST APIs documented with Swagger, JWT authentication, message queues and event-driven designs.</dd>
+          </div>
+          <div>
+            <dt><span class="cell-num">A2</span>Data</dt>
+            <dd>MySQL, SQL Server, PostgreSQL, MongoDB. Entity Framework Core and Eloquent. Query and index tuning on systems with hundreds of concurrent users.</dd>
+          </div>
+          <div>
+            <dt><span class="cell-num">B1</span>Reliability engineering</dt>
+            <dd>Reliability block diagrams with series, parallel and k-out-of-n blocks, Weibull and exponential models, bottom-up system reliability. Applied in AIRMS for rail and in Strata.</dd>
+          </div>
+          <div>
+            <dt><span class="cell-num">B2</span>Delivery</dt>
+            <dd>Docker, GitHub Actions with Digital Ocean runners, automated tests with xUnit, FluentAssertions and PHPUnit, zero-downtime deployments.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="section" id="background" aria-labelledby="edu-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">04</span>Background</p>
+          <h2 id="edu-title">Education &amp; recognition</h2>
+        </div>
+        <dl class="cells">
+          <div>
+            <dt><span class="cell-num">C1</span>BSc Mathematics<span class="cell-sub">Institut Teknologi Sepuluh Nopember · 2017 — 2021</span></dt>
+            <dd>Final project: video-based social distancing monitoring in Python, using a Gaussian mixture model and Euclidean distance with time-of-violation parameters.</dd>
+          </div>
+          <div>
+            <dt><span class="cell-num">C2</span>3rd place, Hackathon BPK RI<span class="cell-sub">GetDataML</span></dt>
+            <dd>A web application visualising government cash-flow data with fraud-detection insights, built on Laravel and MySQL.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="section" id="contact" aria-labelledby="contact-title" data-reveal>
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">05</span>Contact</p>
+          <h2 id="contact-title">Open to backend and reliability work</h2>
+        </div>
+        <p class="contact-big"><a href="mailto:reformantoko@gmail.com">reformantoko@gmail.com</a></p>
+        <p class="contact-lines">
+          <a href="https://github.com/Galang17061" rel="me">github.com/Galang17061</a>
+          <span>Jakarta Pusat, Indonesia · UTC+7</span>
+        </p>
+      </section>
+
+    </div>
   </div>
 
-  <footer>
-    © <span id="year"></span> Galang · This page is static; the demo server wakes on request.
-  </footer>
 </main>
 
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+<footer class="footer container">
+  <span>© 2026 Galang Reformantoko</span>
+  <span>Rev 2026.09 · static site, demo server wakes on request</span>
+</footer>
 
-  const FN = "https://us-central1-vm-testing-507711.cloudfunctions.net/strata-wake";
-  const btn = document.getElementById("launch");
-  const status = document.getElementById("status");
-  const bar = document.getElementById("bar");
-  const fill = document.getElementById("fill");
-
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-  async function call(method) {
-    const r = await fetch(FN, { method });
-    if (!r.ok) throw new Error("wake service " + r.status);
-    return r.json();
-  }
-
-  btn.addEventListener("click", async () => {
-    btn.disabled = true;
-    status.classList.remove("err");
-    try {
-      status.textContent = "Checking the demo server…";
-      let d = await call("GET");
-      if (d.status === "RUNNING" && d.healthy) {
-        status.textContent = "Server is already up — redirecting…";
-        location.href = d.app;
-        return;
-      }
-      status.textContent = "Starting the demo server (about 90 seconds)…";
-      bar.style.display = "block";
-      d = await call("POST");
-      const t0 = Date.now();
-      const budget = 240000;
-      while (Date.now() - t0 < budget) {
-        await sleep(5000);
-        const s = Math.round((Date.now() - t0) / 1000);
-        fill.style.width = Math.min(95, (s / 110) * 100) + "%";
-        status.textContent = "Warming up… " + s + "s (database and app are booting)";
-        try {
-          d = await call("GET");
-          if (d.status === "RUNNING" && d.healthy) {
-            fill.style.width = "100%";
-            status.textContent = "Ready — redirecting…";
-            await sleep(600);
-            location.href = d.app;
-            return;
-          }
-        } catch (e) {}
-      }
-      throw new Error("timed out");
-    } catch (e) {
-      status.classList.add("err");
-      status.textContent =
-        "Couldn't start the demo (" + e.message + "). Please try again, or email me and I'll spin it up for you.";
-      btn.disabled = false;
-      bar.style.display = "none";
-      fill.style.width = "0%";
-    }
-  });
-</script>
+<script src="assets/js/reveal.js" defer></script>
 </body>
 </html>
