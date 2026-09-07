@@ -1,0 +1,88 @@
+/* Reset, typography, layout primitives. Mobile first; only min-width queries. */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--paper);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--fs-body) / 1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; max-width: 100%; }
+svg { fill: none; }
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rule);
+}
+a:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+h1, h2, h3 { font-weight: 500; line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; }
+h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 144;
+}
+h2 { font-family: var(--font-display); font-size: var(--fs-h2); font-variation-settings: "opsz" 72; }
+h3 { font-size: var(--fs-h3); }
+
+p, li, dd { max-width: var(--measure); }
+.nav li, .rows > li, .tags > li, .eyebrow { max-width: none; }
+ul, ol { padding-left: 1.2em; }
+li + li { margin-top: var(--s-2); }
+
+.mono { font-family: var(--font-mono); font-size: var(--fs-mono); }
+.tabular { font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-2); }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+}
+
+.container {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--section);
+  border-top: 1px solid var(--rule);
+}
+
+.section-head { margin-bottom: var(--s-6); }
+.section-head .eyebrow + h2 { margin-top: var(--s-3); }
+
+.prose > * + * { margin-top: var(--s-4); }
+.prose h3 { margin-top: var(--s-7); }
+.prose h3 + * { margin-top: var(--s-3); }
+.prose ul { color: var(--ink-2); }
+.prose p { color: var(--ink-2); }
+.prose p.lede { color: var(--ink); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
