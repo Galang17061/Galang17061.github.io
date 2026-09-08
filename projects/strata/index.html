@@ -7,7 +7,7 @@
 <meta name="description" content="Strata is a reliability analysis platform built around reliability block diagrams: wire components in series, parallel or k-out-of-n, fit Weibull, exponential and Poisson models to failure logs, and let a genetic algorithm pick vendors under a budget.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Strata — a reliability analysis platform, built end to end">
-<meta property="og:description" content="Reliability block diagrams, Weibull fitting and a genetic-algorithm vendor optimiser. Go, Next.js, SQL Server, GCP.">
+<meta property="og:description" content="Reliability block diagrams, Weibull fitting, Monte Carlo rehearsal and a genetic-algorithm vendor optimiser. Go, Next.js, PostgreSQL, GCP.">
 <meta name="theme-color" content="#f7f6f2">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f7f6f2'/%3E%3Cpath d='M3 16h6M23 16h6M9 16c4 0 4-6 8-6h6M9 16c4 0 4 6 8 6h6' fill='none' stroke='%2314171a' stroke-width='2'/%3E%3Ccircle cx='23' cy='10' r='2.5' fill='%230f6e5c'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -253,7 +253,7 @@
           <ul class="tags">
             <li><span class="tag">Go 1.25</span></li>
             <li><span class="tag">chi</span></li>
-            <li><span class="tag">SQL Server 2022</span></li>
+            <li><span class="tag">PostgreSQL 17</span></li>
             <li><span class="tag">Next.js 15</span></li>
             <li><span class="tag">React 19</span></li>
             <li><span class="tag">TypeScript</span></li>
@@ -542,7 +542,7 @@
           <svg viewBox="0 0 640 360" role="img" aria-labelledby="mc-title" focusable="false">
             <title id="mc-title">Monte Carlo rehearsal: three parts in series each draw a lifetime, and the run stops at the shortest; a hundred thousand such runs build a histogram of stopping times; the result is a survival curve read at the mission hour, plus the share of runs each part was the one that failed.</title>
 
-            <text class="label-sm fade" style="--d:0s" x="24" y="24">ONE RUN · THREE PARTS IN SERIES, EACH DRAWING ITS OWN LIFE</text>
+            <text class="label-sm fade" style="--d:0s" x="24" y="24">ONE RUN · EACH PART DRAWS ITS OWN LIFE</text>
             <g class="tracks">
               <rect class="track fade" style="--d:.1s" x="64" y="40" width="200" height="14" rx="2"/>
               <rect class="track fade" style="--d:.15s" x="64" y="68" width="200" height="14" rx="2"/>
@@ -592,13 +592,14 @@
             <path class="curve" pathLength="1" d="M356 44 C378 46 396 52 414 62 C444 80 472 118 500 152 C530 186 560 214 616 242"/>
             <circle class="read fade" style="--d:1.1s" cx="396" cy="52" r="3.5"/>
             <g class="label-sm fade" style="--d:1.1s">
-              <text x="404" y="46">mission 1 000 h</text>
-              <text class="read" x="404" y="62">R = 0.9851</text>
-              <text x="404" y="76">0.9838 – 0.9862</text>
+              <text x="404" y="42">mission 1 000 h</text>
+              <text class="read" x="470" y="70">R = 0.9851</text>
+              <text x="470" y="84">0.9838 – 0.9862</text>
               <text x="352" y="42" text-anchor="end">1</text>
               <text x="352" y="254" text-anchor="end">0</text>
               <text x="616" y="266" text-anchor="end">20 000 h</text>
             </g>
+            <path class="mark fade" style="--d:1.1s" d="M401 54 C424 58 448 62 464 66" fill="none"/>
             <circle class="signal mc-run" r="3.5" style="offset-path: path('M356 44 C378 46 396 52 414 62 C444 80 472 118 500 152 C530 186 560 214 616 242')"/>
 
             <text class="label-sm fade" style="--d:.7s" x="340" y="300">WHAT BROUGHT IT DOWN · SHARE OF RUNS</text>
@@ -614,7 +615,7 @@
               <text class="label-sm fade" style="--d:.9s" x="514" y="346">everything else · 1%</text>
             </g>
           </svg>
-          <figcaption>Illustrative sampling, real output shape. The reliability, its interval and the culprit shares are the figures the demo system returns for its traction motor diagram at a 1 000 hour mission.</figcaption>
+          <figcaption>Three parts in series, so the run ends at the shortest life drawn; a redundant block would carry on. Sampling is illustrative, the output is not — the reliability, its interval and the culprit shares are what the demo system returns for its traction motor diagram at a 1 000 hour mission.</figcaption>
         </figure>
 
         <p>
