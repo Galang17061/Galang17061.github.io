@@ -34,6 +34,15 @@
   .ga .ga-mut { fill: none; stroke: var(--accent); stroke-width: 1.5; }
   .ga .ga-target { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 4 3; }
   .ga .signal { fill: var(--accent); }
+  /* Monte Carlo figure */
+  .mc .track { fill: var(--paper-2); stroke: var(--rule); stroke-width: 1; }
+  .mc .mc-life { fill: var(--ink-3); }
+  .mc .mc-stop line { stroke: var(--accent); stroke-width: 1.5; }
+  .mc .mc-stop text { font-size: 10px; fill: var(--accent); }
+  .mc .share { fill: var(--ink-2); }
+  .mc .mark { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 4 3; }
+  .mc .signal { fill: var(--accent); }
+  .mc .read { fill: var(--accent); }
 </style>
 </head>
 <body>
@@ -323,7 +332,7 @@
       <section class="section prose" id="built" aria-labelledby="built-title" data-reveal>
         <div class="section-head">
           <p class="eyebrow"><span class="num">03</span>What I built</p>
-          <h2 id="built-title">Five parts, one system</h2>
+          <h2 id="built-title">Six parts, one system</h2>
         </div>
 
         <h3>Reliability analytics</h3>
@@ -508,13 +517,131 @@
           <figcaption>Illustrative: 7 slots × 4 candidate vendors is 16 384 combinations. Roulette-wheel selection keeps the fittest, single-point crossover mixes two parents, mutation flips a gene, and the run stops once the best result has not improved for 25 generations.</figcaption>
         </figure>
 
+        <h3>Monte Carlo rehearsal</h3>
+        <p>
+          The algebra above answers what a system's reliability is at one moment. It cannot
+          say how long the system tends to last, how wide the uncertainty is, or which part
+          is usually the one that ends the run. So Strata also rehearses the plant: every
+          component draws a lifetime from its own fitted distribution, the failures are
+          replayed in the order they land, and the run stops the moment the wiring can no
+          longer hold. A hundred thousand runs later there is a distribution to read rather
+          than a single number.
+        </p>
+        <p>
+          Sampling follows the distribution each component was fitted with — inverse
+          transform for exponential and Weibull, and a sum of exponential waits for a
+          Poisson part that tolerates c failures, so the count model keeps its meaning. A
+          k-out-of-n block draws a lifetime for every unit and fails on the (n−k+1)th. Out
+          comes the survival curve, mean and median life, the B10 life, a Wilson interval
+          around the reliability, and the share of runs each part was the one to break —
+          the closest thing to a repair priority the model can honestly give.
+        </p>
+        <p class="formula-block">t<sub>exp</sub> = −ln(U)/λ <span class="k">·</span> t<sub>Weibull</sub> = η(−ln U)<sup>1/β</sup> <span class="k">·</span> t<sub>Poisson,c</sub> = Σ<sub>i=1..c+1</sub> −ln(U<sub>i</sub>)/λ <span class="k">·</span> R̂(t) = survivors / runs</p>
+
+        <figure class="figure figure-wide draw mc">
+          <svg viewBox="0 0 640 360" role="img" aria-labelledby="mc-title" focusable="false">
+            <title id="mc-title">Monte Carlo rehearsal: three parts in series each draw a lifetime, and the run stops at the shortest; a hundred thousand such runs build a histogram of stopping times; the result is a survival curve read at the mission hour, plus the share of runs each part was the one that failed.</title>
+
+            <text class="label-sm fade" style="--d:0s" x="24" y="24">ONE RUN · THREE PARTS IN SERIES, EACH DRAWING ITS OWN LIFE</text>
+            <g class="tracks">
+              <rect class="track fade" style="--d:.1s" x="64" y="40" width="200" height="14" rx="2"/>
+              <rect class="track fade" style="--d:.15s" x="64" y="68" width="200" height="14" rx="2"/>
+              <rect class="track fade" style="--d:.2s" x="64" y="96" width="200" height="14" rx="2"/>
+              <rect class="mc-life mc-life-1" x="64" y="40" width="200" height="14" rx="2"/>
+              <rect class="mc-life mc-life-2" x="64" y="68" width="200" height="14" rx="2"/>
+              <rect class="mc-life mc-life-3" x="64" y="96" width="200" height="14" rx="2"/>
+            </g>
+            <g class="label-sm fade" style="--d:.1s" text-anchor="end">
+              <text x="56" y="51">pump</text>
+              <text x="56" y="79">valve</text>
+              <text x="56" y="107">motor</text>
+            </g>
+            <g class="mc-stop">
+              <line x1="64" y1="34" x2="64" y2="116"/>
+              <text x="68" y="130">the run stops here</text>
+            </g>
+
+            <text class="label-sm fade" style="--d:.3s" x="24" y="176">100 000 RUNS · WHEN THE SYSTEM STOPPED</text>
+            <g class="axis" stroke-width="1">
+              <line class="fade" style="--d:.3s" x1="64" y1="300" x2="290" y2="300"/>
+            </g>
+            <g class="bars">
+              <rect class="bar fade" style="--d:.35s" x="64" y="288" width="16" height="12"/>
+              <rect class="bar fade" style="--d:.4s" x="84" y="256" width="16" height="44"/>
+              <rect class="bar fade" style="--d:.45s" x="104" y="222" width="16" height="78"/>
+              <rect class="bar fade" style="--d:.5s" x="124" y="204" width="16" height="96"/>
+              <rect class="bar fade" style="--d:.55s" x="144" y="216" width="16" height="84"/>
+              <rect class="bar fade" style="--d:.6s" x="164" y="234" width="16" height="66"/>
+              <rect class="bar fade" style="--d:.65s" x="184" y="252" width="16" height="48"/>
+              <rect class="bar fade" style="--d:.7s" x="204" y="266" width="16" height="34"/>
+              <rect class="bar fade" style="--d:.75s" x="224" y="278" width="16" height="22"/>
+              <rect class="bar fade" style="--d:.8s" x="244" y="288" width="16" height="12"/>
+              <rect class="bar fade" style="--d:.85s" x="264" y="294" width="16" height="6"/>
+            </g>
+            <g class="label-sm fade" style="--d:.35s">
+              <text x="64" y="316">0</text>
+              <text x="290" y="316" text-anchor="end">hours until it stopped</text>
+            </g>
+
+            <text class="label-sm fade" style="--d:.5s" x="340" y="24">WHAT COMES OUT · HOW MANY WERE STILL STANDING</text>
+            <g class="axis" stroke-width="1">
+              <line class="fade" style="--d:.5s" x1="356" y1="250" x2="616" y2="250"/>
+              <line class="fade" style="--d:.5s" x1="356" y1="36" x2="356" y2="250"/>
+            </g>
+            <line class="mark fade" style="--d:.9s" x1="396" y1="36" x2="396" y2="250"/>
+            <path class="curve" pathLength="1" d="M356 44 C378 46 396 52 414 62 C444 80 472 118 500 152 C530 186 560 214 616 242"/>
+            <circle class="read fade" style="--d:1.1s" cx="396" cy="52" r="3.5"/>
+            <g class="label-sm fade" style="--d:1.1s">
+              <text x="404" y="46">mission 1 000 h</text>
+              <text class="read" x="404" y="62">R = 0.9851</text>
+              <text x="404" y="76">0.9838 – 0.9862</text>
+              <text x="352" y="42" text-anchor="end">1</text>
+              <text x="352" y="254" text-anchor="end">0</text>
+              <text x="616" y="266" text-anchor="end">20 000 h</text>
+            </g>
+            <circle class="signal mc-run" r="3.5" style="offset-path: path('M356 44 C378 46 396 52 414 62 C444 80 472 118 500 152 C530 186 560 214 616 242')"/>
+
+            <text class="label-sm fade" style="--d:.7s" x="340" y="300">WHAT BROUGHT IT DOWN · SHARE OF RUNS</text>
+            <g class="shares">
+              <rect class="track fade" style="--d:.75s" x="356" y="310" width="150" height="8" rx="2"/>
+              <rect class="share fade" style="--d:.8s" x="356" y="310" width="86" height="8" rx="2"/>
+              <text class="label-sm fade" style="--d:.8s" x="514" y="318">air dryer · 57%</text>
+              <rect class="track fade" style="--d:.75s" x="356" y="324" width="150" height="8" rx="2"/>
+              <rect class="share fade" style="--d:.85s" x="356" y="324" width="63" height="8" rx="2"/>
+              <text class="label-sm fade" style="--d:.85s" x="514" y="332">brake cylinder · 42%</text>
+              <rect class="track fade" style="--d:.75s" x="356" y="338" width="150" height="8" rx="2"/>
+              <rect class="share fade" style="--d:.9s" x="356" y="338" width="3" height="8" rx="2"/>
+              <text class="label-sm fade" style="--d:.9s" x="514" y="346">everything else · 1%</text>
+            </g>
+          </svg>
+          <figcaption>Illustrative sampling, real output shape. The reliability, its interval and the culprit shares are the figures the demo system returns for its traction motor diagram at a 1 000 hour mission.</figcaption>
+        </figure>
+
+        <p>
+          A hundred thousand runs finish in about forty milliseconds, but the request never
+          waits for them. Rehearsals are written into a job table, a second copy of the same
+          binary runs as a worker and takes one at a time with <code>for update skip
+          locked</code>, and each move a job makes is announced on a Postgres channel so the
+          browser hears it on a held-open stream rather than asking again and again. A job
+          abandoned by a worker that died is offered back to the queue after thirty minutes.
+        </p>
+        <p>
+          The part I care most about is what the answer admits. A rehearsal reports how many
+          diagrams and parts it actually covered, names the components wired into nothing,
+          flags any part whose distribution figures are missing — those would otherwise be
+          silently immortal — and refuses to invent a single number for a system whose
+          diagrams have no stated relationship. An honest figure with its limits attached is
+          worth more than a confident one without.
+        </p>
+
         <h3>Backend and data</h3>
         <p>
-          A Go API on chi and sqlx, backed by SQL Server 2022 and shipped as a single static
-          binary. Reliability arithmetic uses decimals rather than floats. JWT sign-in with
-          per-module rights, an audit trail of requests, Excel import of master data, and a
-          generated OpenAPI spec served with Swagger UI. The process exposes its own
-          Prometheus metrics.
+          A Go API on chi and sqlx, backed by PostgreSQL 17 and shipped as a single static
+          binary that also runs as the queue worker. Reliability arithmetic uses decimals
+          rather than floats; the rehearsal engine drops to floats because a hundred thousand
+          runs cannot afford them. JWT sign-in with per-module rights, an audit trail of
+          requests, Excel import of master data, and a generated OpenAPI spec served with
+          Swagger UI. The process exposes its own Prometheus metrics.
         </p>
 
         <h3>Frontend</h3>
@@ -528,8 +655,8 @@
 
         <h3>Operations</h3>
         <p>
-          Nine Compose services: database, API, web, a twin test database for load runs,
-          Mailpit, Uptime Kuma, Prometheus, Grafana and a k6 runner. Caddy terminates TLS in
+          Ten Compose services: database, API, queue worker, web, a twin service for load
+          runs, Mailpit, Uptime Kuma, Prometheus, Grafana and a k6 runner. Caddy terminates TLS in
           front of it on a Google Cloud VM that a small wake service starts on demand and
           shuts down after thirty idle minutes.
         </p>
@@ -542,15 +669,17 @@
         </div>
         <p>
           A browser talks to Caddy, which terminates TLS and routes to the static Next.js
-          build served by nginx and to the Go API. The API does all reliability
-          computation and persists to SQL Server. Prometheus scrapes the API every fifteen
-          seconds and Grafana reads from it. All of it runs as containers on one Google
-          Cloud VM that the demo launcher can start on request.
+          build served by nginx and to the Go API. The API answers anything quick and hands
+          anything slow to a job table in PostgreSQL, where a worker built from the same
+          binary picks it up. The worker's progress travels back through a Postgres
+          notification channel and out to the browser on an open stream. Prometheus scrapes
+          the API every fifteen seconds and Grafana reads from it. All of it runs as
+          containers on one Google Cloud VM that the demo launcher can start on request.
         </p>
 
         <figure class="figure figure-wide draw">
           <svg viewBox="0 0 640 300" role="img" aria-labelledby="arch-title" focusable="false">
-            <title id="arch-title">Architecture: browser to Caddy, then to the static web build on nginx and to the Go API; the API talks to SQL Server; Prometheus scrapes the API. Web, API, database and Prometheus run as Docker containers on one GCP VM.</title>
+            <title id="arch-title">Architecture: browser to Caddy, then to the static web build on nginx and to the Go API; the API reads and writes PostgreSQL and leaves slow work in a job table that a worker drains; the worker's announcements return to the browser as a stream; Prometheus scrapes the API. Web, API, worker, database and Prometheus run as Docker containers on one GCP VM.</title>
             <rect class="enclosure fade" style="--d:0s" x="284" y="40" width="332" height="236" rx="6"/>
             <text class="label-sm fade" style="--d:0s" x="300" y="60">GCP VM · Docker Compose</text>
             <g class="edges" stroke="currentColor" stroke-width="1.5">
@@ -559,7 +688,8 @@
               <path class="edge" pathLength="1" style="--d:.3s"  d="M244 144 C280 144 280 182 312 182"/>
               <path class="edge" pathLength="1" style="--d:.5s"  d="M360 118 V160"/>
               <path class="edge" pathLength="1" style="--d:.6s"  d="M408 182 H480"/>
-              <path class="edge" pathLength="1" style="--d:.75s" d="M480 246 C440 246 372 240 372 204"/>
+              <path class="edge" pathLength="1" style="--d:.75s" d="M520 118 C500 136 442 150 408 158"/>
+              <path class="edge" pathLength="1" style="--d:.95s" d="M408 240 C452 240 502 230 526 208"/>
             </g>
             <g class="nodes" fill="var(--paper)" stroke="currentColor" stroke-width="1.5">
               <rect class="node" style="--d:0s"   x="24"  y="122" width="88"  height="44" rx="3"/>
@@ -567,15 +697,17 @@
               <rect class="node" style="--d:.35s" x="312" y="74"  width="96"  height="44" rx="3"/>
               <rect class="node" style="--d:.35s" x="312" y="160" width="96"  height="44" rx="3"/>
               <rect class="node" style="--d:.65s" x="480" y="160" width="104" height="44" rx="3"/>
-              <rect class="node" style="--d:.8s"  x="480" y="226" width="104" height="40" rx="3"/>
+              <rect class="node" style="--d:.8s"  x="480" y="74"  width="104" height="40" rx="3"/>
+              <rect class="node" style="--d:.9s"  x="312" y="220" width="96"  height="40" rx="3"/>
             </g>
             <g class="label" text-anchor="middle" dominant-baseline="middle" stroke="none">
               <text class="fade" style="--d:0s"   x="68"  y="145">Browser</text>
               <text class="fade" style="--d:.15s" x="200" y="145">Caddy · TLS</text>
               <text class="fade" style="--d:.35s" x="360" y="97">Web · nginx</text>
               <text class="fade" style="--d:.35s" x="360" y="183">Go API</text>
-              <text class="fade" style="--d:.65s" x="532" y="183">SQL Server</text>
-              <text class="fade" style="--d:.8s"  x="532" y="247">Prometheus</text>
+              <text class="fade" style="--d:.65s" x="532" y="183">PostgreSQL</text>
+              <text class="fade" style="--d:.8s"  x="532" y="95">Prometheus</text>
+              <text class="fade" style="--d:.9s"  x="360" y="241">Worker</text>
             </g>
           </svg>
           <figcaption>Request path and container boundary. Grafana, Mailpit, Uptime Kuma and the wake service that starts the VM are left out for clarity.</figcaption>
@@ -592,6 +724,9 @@
             <tr><th scope="row">k6 stress profile</th><td>50 → 500 virtual users, cross-region</td></tr>
             <tr><th scope="row">Users reached at 0% errors</th><td>500</td></tr>
             <tr><th scope="row">Failure threshold in the rig</th><td>&lt; 2% requests, p95 read &lt; 1 s</td></tr>
+            <tr><th scope="row">Rehearsal against the algebra</th><td>0.98459 simulated vs 0.984733 derived</td></tr>
+            <tr><th scope="row">Rehearsal throughput</th><td>100 000 runs in ≈ 40 ms</td></tr>
+            <tr><th scope="row">Queue limits</th><td>3 jobs per person, 60 in all</td></tr>
             <tr><th scope="row">GA defaults</th><td>population 700, up to 1 500 generations</td></tr>
             <tr><th scope="row">Concurrent GA searches</th><td>2, then queue</td></tr>
             <tr><th scope="row">Automatic snapshots kept</th><td>20 per system</td></tr>

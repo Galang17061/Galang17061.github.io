@@ -89,3 +89,42 @@ a, .btn, .tag, .row-title, .row-num svg rect {
   .js .draw.is-in .ga-cut, .js .draw.is-in .ga-mut { animation: none; opacity: 1; }
   .js .draw.is-in .ga-run { animation: none; }
 }
+
+/* Monte Carlo figure (Strata): the same exception. Each part redraws its own
+   lifetime four times over, and the stop line lands on whichever is shortest. */
+.mc .mc-life { transform-box: fill-box; transform-origin: left center; }
+.mc .mc-run { offset-distance: 100%; }
+.js .draw.is-in .mc-life-1 { animation: fade 0.5s ease-out 0.5s forwards, mc-roll-1 6s 1.4s infinite; }
+.js .draw.is-in .mc-life-2 { animation: fade 0.5s ease-out 0.6s forwards, mc-roll-2 6s 1.4s infinite; }
+.js .draw.is-in .mc-life-3 { animation: fade 0.5s ease-out 0.7s forwards, mc-roll-3 6s 1.4s infinite; }
+.js .draw.is-in .mc-stop { animation: fade 0.5s ease-out 0.8s forwards, mc-stop 6s 1.4s infinite; }
+.js .draw.is-in .mc-run { animation: travel 7s linear 1.8s infinite; }
+@keyframes mc-roll-1 {
+  0%, 23% { transform: scaleX(0.60); }
+  25%, 48% { transform: scaleX(0.30); }
+  50%, 73% { transform: scaleX(0.95); }
+  75%, 100% { transform: scaleX(0.50); }
+}
+@keyframes mc-roll-2 {
+  0%, 23% { transform: scaleX(0.88); }
+  25%, 48% { transform: scaleX(0.70); }
+  50%, 73% { transform: scaleX(0.40); }
+  75%, 100% { transform: scaleX(0.55); }
+}
+@keyframes mc-roll-3 {
+  0%, 23% { transform: scaleX(0.45); }
+  25%, 48% { transform: scaleX(1); }
+  50%, 73% { transform: scaleX(0.75); }
+  75%, 100% { transform: scaleX(0.33); }
+}
+@keyframes mc-stop {
+  0%, 23% { transform: translateX(90px); }
+  25%, 48% { transform: translateX(60px); }
+  50%, 73% { transform: translateX(80px); }
+  75%, 100% { transform: translateX(66px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .draw.is-in .mc-life-1, .js .draw.is-in .mc-life-2, .js .draw.is-in .mc-life-3 { animation: none; opacity: 1; }
+  .js .draw.is-in .mc-stop { animation: none; opacity: 1; }
+  .js .draw.is-in .mc-run { animation: none; }
+}
